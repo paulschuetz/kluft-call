@@ -30,11 +30,10 @@ exports.createUser = function(user) {
  **/
 exports.getGames = function(offset, limit) {
   return new Promise(function(resolve, reject) {
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
+    models.Game.find().skip(offset).limit(limit).exec(function(err, result){
+      if(err) reject(err)
+      resolve(result)
+    })
   });
 }
 

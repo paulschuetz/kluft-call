@@ -22,7 +22,7 @@ var options = {
 };
 
 // The Swagger document (require it, build it programmatically, fetch it from a URL, ...)
-var spec = fs.readFileSync(path.join(__dirname,'api/swagger.yaml'), 'utf8');
+var spec = fs.readFileSync(path.join(__dirname,'api/swagger/swagger.yaml'), 'utf8');
 var swaggerDoc = jsyaml.safeLoad(spec);
 
 // Initialize the Swagger middleware

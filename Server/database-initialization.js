@@ -17,7 +17,8 @@ Promise.all(
   })]).then(function() {
   // fill tables
   var pablo = new models.User({name: "pablo", password: "secret"})
-  pablo.save().then(user => console.log("User created: " + user))
+  console.log("THIS IS THE ID: " + pablo.id)
+  pablo.save().then(user => console.log("User created: " + user.id))
 
   var luki = new models.User({name: "luki", password: "secret"})
   luki.save().then(user => console.log("User created: " + user))

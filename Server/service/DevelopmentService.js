@@ -1,15 +1,8 @@
 'use strict';
+var models = require('../models')
 var mongoose = require('mongoose')
-const path = require("path");
 var swaggerMongoose = require('swagger-mongoose');
 var fs = require('fs')
-
-console.log("TEST")
-
-var swagger = fs.readFileSync('swagger.json', "utf8");
-var User = swaggerMongoose.compile(swagger).models.User;
-var pablo = new User({name: 'pablo', password: 'secret-shit'})
-pablo.save();
 
 /**
  * create new user
@@ -19,7 +12,7 @@ pablo.save();
  **/
 exports.createUser = function(user) {
   return new Promise(function(resolve, reject) {
-    var newUser = new User(user)
+    var newUser = new models.User(user)
     newUser.save().then(function(user){
       resolve(user)
     }).catch(function(err){
@@ -37,22 +30,6 @@ exports.createUser = function(user) {
  **/
 exports.getGames = function(offset, limit) {
   return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [
-      {
-        "gameType": {
-          "numberOfPlayersAllowed": 5,
-          "name": "Summoners Rift"
-        },
-        "name": "Fortnite"
-      }, {
-        "gameType": {
-          "numberOfPlayersAllowed": 5,
-          "name": "Summoners Rift"
-        },
-        "name": "Fortnite"
-      }
-    ];
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {

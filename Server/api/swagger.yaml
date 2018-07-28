@@ -173,7 +173,9 @@ definitions:
         type: "string"
         example: "Fortnite"
       gameType:
-        $ref: "#/definitions/GameType"
+        type: array
+        items:
+          $ref: "#/definitions/GameType"
     example:
       gameType:
         numberOfPlayersAllowed: 5

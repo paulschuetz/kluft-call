@@ -1,0 +1,288 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "When Kluft is life an life is Kluft",
+    "version" : "1.0.0",
+    "title" : "Kluft-Call API",
+    "contact" : {
+      "email" : "you@your-company.com"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host" : "localhost:8080",
+  "basePath" : "/supreme-winfos/kluft-call/1.0.0",
+  "tags" : [ {
+    "name" : "production",
+    "description" : "Tested and production-ready"
+  }, {
+    "name" : "development",
+    "description" : "Still in development"
+  } ],
+  "schemes" : [ "http" ],
+  "paths" : {
+    "/users" : {
+      "get" : {
+        "tags" : [ "development" ],
+        "summary" : "get list of users",
+        "description" : "get collection of users",
+        "operationId" : "getUsers",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "The number of items to skip before starting to collect the result",
+          "required" : false,
+          "type" : "integer"
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "The number of items to return",
+          "required" : false,
+          "type" : "integer"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "the returned users",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/User"
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "development" ],
+        "summary" : "create new user",
+        "description" : "create new user",
+        "operationId" : "createUser",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "user",
+          "description" : "the user to create",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/User"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        }
+      }
+    },
+    "/games" : {
+      "get" : {
+        "tags" : [ "development" ],
+        "summary" : "get collection of games",
+        "description" : "get collection of games",
+        "operationId" : "getGames",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "offset",
+          "in" : "query",
+          "description" : "The number of items to skip before starting to collect the result",
+          "required" : false,
+          "type" : "integer",
+          "default" : 0
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "The number of items to return",
+          "required" : false,
+          "type" : "integer",
+          "default" : 10
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "a collection of games",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/Game"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/lobbies/{id}" : {
+      "get" : {
+        "tags" : [ "development" ],
+        "summary" : "get a lobby",
+        "description" : "get a lobby",
+        "operationId" : "getLobby",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "the lobby id",
+          "required" : true,
+          "type" : "integer",
+          "minimum" : 1
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/Lobby"
+            }
+          }
+        }
+      }
+    },
+    "/lobbies/{id}/users" : {
+      "patch" : {
+        "tags" : [ "development" ],
+        "summary" : "add a user to a lobby",
+        "description" : "add a user-reference to a lobby",
+        "operationId" : "joinLobby",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "id of the lobby the user joins",
+          "required" : true,
+          "type" : "integer",
+          "minimum" : 1
+        }, {
+          "in" : "body",
+          "name" : "user",
+          "description" : "userId of the user joining the group",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/user"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "user successfully joined the lobby",
+            "schema" : {
+              "$ref" : "#/definitions/Lobby"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "User" : {
+      "type" : "object",
+      "required" : [ "name", "password" ],
+      "properties" : {
+        "name" : {
+          "type" : "string",
+          "example" : "808Frittenbude"
+        },
+        "password" : {
+          "type" : "string",
+          "format" : "password",
+          "example" : "very-secret"
+        }
+      },
+      "example" : {
+        "password" : "very-secret",
+        "name" : "808Frittenbude"
+      }
+    },
+    "Game" : {
+      "type" : "object",
+      "required" : [ "gameType", "name" ],
+      "properties" : {
+        "name" : {
+          "type" : "string",
+          "example" : "Fortnite"
+        },
+        "gameType" : {
+          "$ref" : "#/definitions/GameType"
+        }
+      },
+      "example" : {
+        "gameType" : {
+          "numberOfPlayersAllowed" : 5,
+          "name" : "Summoners Rift"
+        },
+        "name" : "Fortnite"
+      }
+    },
+    "GameType" : {
+      "type" : "object",
+      "required" : [ "name", "numberOfPlayersAllowed" ],
+      "properties" : {
+        "name" : {
+          "type" : "string",
+          "example" : "Summoners Rift"
+        },
+        "numberOfPlayersAllowed" : {
+          "type" : "integer",
+          "example" : 5
+        }
+      },
+      "example" : {
+        "numberOfPlayersAllowed" : 5,
+        "name" : "Summoners Rift"
+      }
+    },
+    "Lobby" : {
+      "type" : "object",
+      "required" : [ "game", "invitedUsers", "lobbyMembers" ],
+      "properties" : {
+        "game" : {
+          "$ref" : "#/definitions/Game"
+        },
+        "lobbyMembers" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/User"
+          }
+        },
+        "invitedUsers" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/definitions/User"
+          }
+        }
+      },
+      "example" : {
+        "game" : {
+          "gameType" : {
+            "numberOfPlayersAllowed" : 5,
+            "name" : "Summoners Rift"
+          },
+          "name" : "Fortnite"
+        },
+        "lobbyMembers" : [ {
+          "password" : "very-secret",
+          "name" : "808Frittenbude"
+        }, {
+          "password" : "very-secret",
+          "name" : "808Frittenbude"
+        } ],
+        "invitedUsers" : [ {
+          "password" : "very-secret",
+          "name" : "808Frittenbude"
+        }, {
+          "password" : "very-secret",
+          "name" : "808Frittenbude"
+        } ]
+      }
+    },
+    "user" : {
+      "type" : "object",
+      "required" : [ "userId" ],
+      "properties" : {
+        "userId" : {
+          "type" : "integer",
+          "description" : "id of the user joining the group",
+          "minimum" : 1
+        }
+      }
+    }
+  }
+}

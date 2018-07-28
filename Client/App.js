@@ -17,4 +17,4 @@ export default class FlexDimensionsBasics extends Component {
 }
 
 // skip this line if using Create React Native App
-AppRegistry.registerComponent('kluft-call', () => FlexDimensionsBasics);
+AppRegistry.registerComponent('AwesomeProject', () => FlexDimensionsBasics);

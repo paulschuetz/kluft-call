@@ -109,7 +109,7 @@ paths:
         in: "path"
         description: "the lobby id"
         required: true
-        type: "integer"
+        type: "string"
         minimum: 1
       responses:
         200:
@@ -131,7 +131,7 @@ paths:
         in: "path"
         description: "id of the lobby the user joins"
         required: true
-        type: "integer"
+        type: "string"
         minimum: 1
       - in: "body"
         name: "user"
@@ -158,6 +158,8 @@ definitions:
       password:
         type: "string"
         format: "password"
+        minLength: 6
+        maxLength: 20
         example: "very-secret"
     example:
       password: "very-secret"
@@ -234,6 +236,6 @@ definitions:
     - "userId"
     properties:
       userId:
-        type: "integer"
+        type: "string"
         description: "id of the user joining the group"
         minimum: 1

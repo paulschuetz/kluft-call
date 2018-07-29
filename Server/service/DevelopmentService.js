@@ -3,6 +3,7 @@ var models = require('../models')
 var mongoose = require('mongoose')
 var swaggerMongoose = require('swagger-mongoose');
 var fs = require('fs')
+var bluePromise = require('bluebird')
 
 /**
  * create new user
@@ -16,6 +17,7 @@ exports.createUser = function(user) {
     newUser.save().then(function(user){
       resolve(user)
     }).catch(function(err){
+      console.log("SHIT: "+err)
       reject(err)
     })
   })
@@ -44,43 +46,19 @@ exports.getGames = function(offset, limit) {
  * id Integer the lobby id
  * returns Lobby
  **/
-exports.getLobby = function(id) {
+var getLobby = function(id) {
   return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-      "game": {
-        "gameType": {
-          "numberOfPlayersAllowed": 5,
-          "name": "Summoners Rift"
-        },
-        "name": "Fortnite"
-      },
-      "lobbyMembers": [
-        {
-          "password": "very-secret",
-          "name": "808Frittenbude"
-        }, {
-          "password": "very-secret",
-          "name": "808Frittenbude"
+      models.Lobby.findById(id, function(err, lobby){
+        if(err) {
+          console.log("Lobby error")
+          reject(err)
         }
-      ],
-      "invitedUsers": [
-        {
-          "password": "very-secret",
-          "name": "808Frittenbude"
-        }, {
-          "password": "very-secret",
-          "name": "808Frittenbude"
-        }
-      ]
-    };
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
-}
+        resolve(lobby)
+      })
+    })
+  };
+
+  exports.getLobby = getLobby;
 
 /**
  * get list of users
@@ -92,22 +70,20 @@ exports.getLobby = function(id) {
  **/
 exports.getUsers = function(offset, limit) {
   return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [
-      {
-        "password": "very-secret",
-        "name": "808Frittenbude"
-      }, {
-        "password": "very-secret",
-        "name": "808Frittenbude"
-      }
-    ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
+    models.User.find().skip(offset).limit(limit).exec(function(err, users){
+      if(err) rejecct(err)
+      else resolve(users)
+    })
   });
+}
+
+var getUser = function(userId){
+  return new Promise(function(resolve,reject){
+    models.User.findById(userId, function(err, user){
+      if(err) reject(err)
+      resolve(user)
+    })
+  })
 }
 
 /**
@@ -119,39 +95,16 @@ exports.getUsers = function(offset, limit) {
  * returns Lobby
  **/
 exports.joinLobby = function(id, user) {
+  console.log(`joinLobby(lobbyId:${id},userId:${user.userId})`)
   return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-      "game": {
-        "gameType": {
-          "numberOfPlayersAllowed": 5,
-          "name": "Summoners Rift"
-        },
-        "name": "Fortnite"
-      },
-      "lobbyMembers": [
-        {
-          "password": "very-secret",
-          "name": "808Frittenbude"
-        }, {
-          "password": "very-secret",
-          "name": "808Frittenbude"
-        }
-      ],
-      "invitedUsers": [
-        {
-          "password": "very-secret",
-          "name": "808Frittenbude"
-        }, {
-          "password": "very-secret",
-          "name": "808Frittenbude"
-        }
-      ]
-    };
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
+    return bluePromise.join(getLobby(id), getUser(user.userId), function(lobby, user){
+      console.log("lobby: "+lobby);
+      console.log("user: " +user)
+      return models.Lobby.findOneAndUpdate({_id:id}, {"$addToSet": { "lobbyMembers": user }},{},function(err, updatedLobby){
+        if(err) reject(err)
+        console.log(updatedLobby)
+        resolve(updatedLobby)
+      })
+    })
   });
 }

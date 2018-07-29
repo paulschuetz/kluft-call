@@ -157,7 +157,7 @@
             "in": "path",
             "description": "the lobby id",
             "required": true,
-            "type": "integer",
+            "type": "string",
             "minimum": 1
           }
         ],
@@ -189,7 +189,7 @@
             "in": "path",
             "description": "id of the lobby the user joins",
             "required": true,
-            "type": "integer",
+            "type": "string",
             "minimum": 1
           },
           {
@@ -229,6 +229,8 @@
         "password": {
           "type": "string",
           "format": "password",
+          "minLength": 6,
+          "maxLength": 20,
           "example": "very-secret"
         }
       },
@@ -345,7 +347,7 @@
       ],
       "properties": {
         "userId": {
-          "type": "integer",
+          "type": "string",
           "description": "id of the user joining the group",
           "minimum": 1
         }

@@ -2,7 +2,7 @@ var mongoose = require('mongoose')
 var swaggerMongoose = require('swagger-mongoose');
 var fs = require('fs')
 
-var swagger = fs.readFileSync('swagger.json', "utf8");
+var swagger = fs.readFileSync('./api/swagger/swagger.json', "utf8");
 
 var models = swaggerMongoose.compile(swagger).models;
 

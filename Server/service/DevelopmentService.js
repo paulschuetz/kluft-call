@@ -12,13 +12,11 @@ var bluePromise = require('bluebird')
  * no response value expected for this operation
  **/
 exports.createUser = function(user) {
+  console.log(`createUser(${JSON.stringify(user)})`)
   return new Promise(function(resolve, reject) {
-    var newUser = new models.User(user)
-    newUser.save().then(function(user){
-      resolve(user)
-    }).catch(function(err){
-      console.log("SHIT: "+err)
-      reject(err)
+    models.User.create(user,function(err, newUser){
+      if(err) reject(err)
+      else resolve(newUser)
     })
   })
 }
@@ -31,12 +29,13 @@ exports.createUser = function(user) {
  * returns List
  **/
 exports.getGames = function(offset, limit) {
-  return new Promise(function(resolve, reject) {
-    models.Game.find().skip(offset).limit(limit).exec(function(err, result){
-      if(err) reject(err)
-      resolve(result)
-    })
-  });
+return new Promise(function(resolve, reject) {
+  models.Game.find().skip(offset).limit(limit).exec(function(err, result) {
+    if (err)
+      reject(err)
+    resolve(result)
+  })
+});
 }
 
 /**
@@ -47,18 +46,18 @@ exports.getGames = function(offset, limit) {
  * returns Lobby
  **/
 var getLobby = function(id) {
-  return new Promise(function(resolve, reject) {
-      models.Lobby.findById(id, function(err, lobby){
-        if(err) {
-          console.log("Lobby error")
-          reject(err)
-        }
-        resolve(lobby)
-      })
-    })
-  };
+return new Promise(function(resolve, reject) {
+  models.Lobby.findById(id, function(err, lobby) {
+    if (err) {
+      console.log("Lobby error")
+      reject(err)
+    }
+    resolve(lobby)
+  })
+})
+};
 
-  exports.getLobby = getLobby;
+exports.getLobby = getLobby;
 
 /**
  * get list of users
@@ -69,21 +68,24 @@ var getLobby = function(id) {
  * returns List
  **/
 exports.getUsers = function(offset, limit) {
-  return new Promise(function(resolve, reject) {
-    models.User.find().skip(offset).limit(limit).exec(function(err, users){
-      if(err) rejecct(err)
-      else resolve(users)
-    })
-  });
+return new Promise(function(resolve, reject) {
+  models.User.find().skip(offset).limit(limit).exec(function(err, users) {
+    if (err)
+      rejecct(err)
+    else
+      resolve(users)
+  })
+});
 }
 
-var getUser = function(userId){
-  return new Promise(function(resolve,reject){
-    models.User.findById(userId, function(err, user){
-      if(err) reject(err)
-      resolve(user)
-    })
+var getUser = function(userId) {
+return new Promise(function(resolve, reject) {
+  models.User.findById(userId, function(err, user) {
+    if (err)
+      reject(err)
+    resolve(user)
   })
+})
 }
 
 /**
@@ -95,16 +97,23 @@ var getUser = function(userId){
  * returns Lobby
  **/
 exports.joinLobby = function(id, user) {
-  console.log(`joinLobby(lobbyId:${id},userId:${user.userId})`)
-  return new Promise(function(resolve, reject) {
-    return bluePromise.join(getLobby(id), getUser(user.userId), function(lobby, user){
-      console.log("lobby: "+lobby);
-      console.log("user: " +user)
-      return models.Lobby.findOneAndUpdate({_id:id}, {"$addToSet": { "lobbyMembers": user }},{},function(err, updatedLobby){
-        if(err) reject(err)
-        console.log(updatedLobby)
-        resolve(updatedLobby)
-      })
+console.log(`joinLobby(lobbyId:${id},userId:${user.userId})`)
+return new Promise(function(resolve, reject) {
+  return bluePromise.join(getLobby(id), getUser(user.userId), function(lobby, user) {
+    console.log("lobby: " + lobby);
+    console.log("user: " + user)
+    return models.Lobby.findOneAndUpdate({
+      _id: id
+    }, {
+      "$addToSet": {
+        "lobbyMembers": user
+      }
+    }, {new:true}, function(err, updatedLobby) {
+      if (err)
+        reject(err)
+      console.log(updatedLobby)
+      resolve(updatedLobby)
     })
-  });
+  })
+});
 }

@@ -1,14 +1,19 @@
 'use strict';
 
 var fs = require('fs'),
-    path = require('path'),
-    http = require('http');
+  path = require('path'),
+  http = require('http'),
+socketio = require('socket.io');
 
+var bodyParser = require('body-parser');
 var app = require('connect')();
 var swaggerTools = require('swagger-tools');
 var jsyaml = require('js-yaml');
 var serverPort = 8080;
 var mongoose = require('mongoose')
+
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 
 // set up db connection
 mongoose.Promise = global.Promise
@@ -22,11 +27,11 @@ var options = {
 };
 
 // The Swagger document (require it, build it programmatically, fetch it from a URL, ...)
-var spec = fs.readFileSync(path.join(__dirname,'./api/swagger/swagger.yaml'), 'utf8');
+var spec = fs.readFileSync(path.join(__dirname, './api/swagger/swagger.yaml'), 'utf8');
 var swaggerDoc = jsyaml.safeLoad(spec);
 
 // Initialize the Swagger middleware
-swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
+swaggerTools.initializeMiddleware(swaggerDoc, function(middleware) {
 
   // Interpret Swagger resources and attach metadata to request - must be first in swagger-tools middleware chain
   app.use(middleware.swaggerMetadata());
@@ -40,12 +45,17 @@ swaggerTools.initializeMiddleware(swaggerDoc, function (middleware) {
   // Serve the Swagger documents and Swagger UI
   app.use(middleware.swaggerUi());
 
-console.log("TEST")
+  console.log("TEST")
 
   // Start the server
-  http.createServer(app).listen(serverPort, function () {
+  var server = http.createServer(app).listen(serverPort, function() {
     console.log('Your server is listening on port %d (http://localhost:%d)', serverPort, serverPort);
     console.log('Swagger-ui is available on http://localhost:%d/docs', serverPort);
   });
 
+  // socket connection
+  var websocket = socketio(server);
+  websocket.on('connection', (socket) => {
+    console.log('A client just joined on', socket.id);
+  });
 });

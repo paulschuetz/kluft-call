@@ -33,11 +33,13 @@ paths:
         description: "The number of items to skip before starting to collect the result"
         required: false
         type: "integer"
+        default: 0
       - name: "limit"
         in: "query"
         description: "The number of items to return"
         required: false
         type: "integer"
+        default: 10
       responses:
         200:
           description: "the returned users"
@@ -58,7 +60,7 @@ paths:
       - in: "body"
         name: "user"
         description: "the user to create"
-        required: false
+        required: true
         schema:
           $ref: "#/definitions/User"
       responses:
@@ -95,6 +97,26 @@ paths:
             items:
               $ref: "#/definitions/Game"
       x-swagger-router-controller: "Development"
+  /lobbies:
+    post:
+      summary: create a new lobby
+      description: create a new lobbby
+      operationId: "createLobby"
+      tags:
+      - "development"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "lobby"
+        in: "body"
+        description: "the lobby to create"
+        required: true
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        200:
+          description: OK
+    
   /lobbies/{id}:
     get:
       tags:
@@ -134,11 +156,11 @@ paths:
         type: "string"
         minimum: 1
       - in: "body"
-        name: "user"
+        name: "UserId"
         description: "userId of the user joining the group"
         required: false
         schema:
-          $ref: "#/definitions/user"
+          $ref: "#/definitions/UserId"
       responses:
         200:
           description: "user successfully joined the lobby"
@@ -230,7 +252,7 @@ definitions:
         name: "808Frittenbude"
       - password: "very-secret"
         name: "808Frittenbude"
-  user:
+  UserId:
     type: "object"
     required:
     - "userId"
@@ -239,3 +261,13 @@ definitions:
         type: "string"
         description: "id of the user joining the group"
         minimum: 1
+  UserName:
+    type: "object"
+    required:
+    - "userName"
+    properties:
+      userName:
+        type: "string"
+        description: "name of the user"
+        required: true
+

@@ -45,14 +45,16 @@
             "in": "query",
             "description": "The number of items to skip before starting to collect the result",
             "required": false,
-            "type": "integer"
+            "type": "integer",
+            "default": 0
           },
           {
             "name": "limit",
             "in": "query",
             "description": "The number of items to return",
             "required": false,
-            "type": "integer"
+            "type": "integer",
+            "default": 10
           }
         ],
         "responses": {

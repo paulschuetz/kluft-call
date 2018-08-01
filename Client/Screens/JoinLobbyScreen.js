@@ -5,9 +5,14 @@ import {getUsername, persistUsername} from '../persistence.js'
 const serverPort = 8080
 const serverIp =  "192.168.178.60"
 const serverUrl = `http://${serverIp}:${serverPort}/supreme-winfos/kluft-call/1.0.0`
-const userEndpoint = serverUrl + "/users"
+const lobbyEndpoint = serverUrl + "/lobbies"
 
 export default class JoinLobbyScreen extends Component {
+
+  constructor(props){
+    super(props);
+  }
+
   render() {
     return (
       <View style={{

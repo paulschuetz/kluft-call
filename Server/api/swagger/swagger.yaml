@@ -223,15 +223,10 @@ definitions:
           name: "Summoners Rift"
         name: "Fortnite"
       lobbyMembers:
-      - password: "very-secret"
-        name: "808Frittenbude"
-      - password: "very-secret"
-        name: "808Frittenbude"
+      - username: "808Frittenbude"
       invitedUsers:
-      - password: "very-secret"
-        name: "808Frittenbude"
-      - password: "very-secret"
-        name: "808Frittenbude"
+      - username: "Latak"
+      - username: "Snacksen"
   UserId:
     type: "object"
     required:

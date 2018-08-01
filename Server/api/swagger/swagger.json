@@ -322,22 +322,15 @@
         },
         "lobbyMembers": [
           {
-            "password": "very-secret",
-            "name": "808Frittenbude"
-          },
-          {
-            "password": "very-secret",
-            "name": "808Frittenbude"
+            "username": "808Frittenbude"
           }
         ],
         "invitedUsers": [
           {
-            "password": "very-secret",
-            "name": "808Frittenbude"
+            "username": "Latak"
           },
           {
-            "password": "very-secret",
-            "name": "808Frittenbude"
+            "username": "Snacksen"
           }
         ]
       }

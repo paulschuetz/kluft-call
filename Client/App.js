@@ -11,7 +11,7 @@ const RootStack = createStackNavigator({
   CreateLobby: CreateLobbyScreen,
   JoinLobby: JoinLobbyScreen,
   RegisterUser: RegistrationScreen
-}, {initialRouteName: 'RegisterUser', headerMode:'none'});
+}, {initialRouteName: 'RegisterUser  headerMode:'none'});
 
 export default class App extends React.Component {
   render() {

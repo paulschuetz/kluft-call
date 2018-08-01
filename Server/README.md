@@ -5,20 +5,20 @@ Server managing database operations and business logic. Handles client's REST-AP
 To run the server, run:
 
 ```
-npm start run
+$npm start run
 ```
 
 To view the Swagger UI interface:
 
 ```
-open http://localhost:8080/docs
+open "http://localhost:8080/docs"
 ```
 
 To edit REST endpoints and definitions
 
 ```
-run swagger project edit
+$swagger project edit
 ```
 ```
-open http://localhost:8080/docs
+open "http://localhost:8080/docs"
 ```

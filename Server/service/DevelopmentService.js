@@ -14,8 +14,8 @@ var bluePromise = require('bluebird')
 exports.createUser = function(user) {
   console.log(`createUser(${JSON.stringify(user)})`)
   return new Promise(function(resolve, reject) {
-    models.User.create(user,function(err, newUser){
-      if(err) reject(err)
+    return models.User.create(user, function(err, newUser){
+      if(err) reject({error: "User already exists!"})
       else resolve(newUser)
     })
   })

@@ -3,14 +3,14 @@
 var utils = require('../utils/writer.js');
 var Development = require('../service/DevelopmentService');
 
-module.exports.createUser = function createUser (req, res, next) {
+module.exports.createUser = function createUser(req, res, next) {
   var user = req.swagger.params['user'].value;
   Development.createUser(user)
     .then(function (response) {
       utils.writeJson(res, response);
     })
     .catch(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, utils.respondWithCode(400, response))
     });
 };
 

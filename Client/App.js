@@ -1,8 +1,14 @@
 import React, {Component} from 'react';
-import {Alert, AppRegistry, View, Text, ImageBackground, Button, TextInput, StyleSheet} from 'react-native';
+import {ActivityIndicator, Alert, AppRegistry, View, Text, ImageBackground, Button, TextInput, StyleSheet} from 'react-native';
 import SocketIOClient from 'socket.io-client';
 import {createStackNavigator} from 'react-navigation';
 import {Icon} from 'react-native-elements'
+
+const serverPort = 8080
+const serverIp =  "192.168.178.60"
+const serverUrl = `http://${serverIp}:${serverPort}/supreme-winfos/kluft-call/1.0.0`
+const userEndpoint = serverUrl + "/users"
+
 
 class HomeScreen extends Component {
 
@@ -49,12 +55,56 @@ class JoinLobbyScreen extends Component {
   }
 }
 
+// TODO text validation while typing
 class RegisterUserScreen extends Component {
   constructor(props) {
     super(props);
+    this.state = {isLoading: false}
   }
 
   render() {
+
+    var register = () => {
+
+      this.setState(()=>{
+        return {isLoading : true}
+      })
+
+      // try to save user via rest-call
+      fetch(userEndpoint, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify({
+          name: this.state.username,
+          password: this.state.password
+        })
+      })
+      .then(response=>{
+        if(response.status>204) reject();
+        return response.json()
+      })
+      .then(responseJson => {
+        console.log("success: " + JSON.stringify(responseJson))
+        // stop spinner
+        this.setState(()=>{
+          return {isLoading: false}
+        })
+        // Go to Home Screen
+        this.props.navigation.navigate('Home')
+      })
+      .catch(()=> {
+        // stop spinner
+        this.setState(()=>{
+          return {isLoading: false};
+        })
+      })
+      // if success save name on clients-device
+      // if success go to home-view
+    }
+
     return (
       <ImageBackground style={{
         flex: 1,
@@ -67,7 +117,7 @@ class RegisterUserScreen extends Component {
               style={styles.input}
               textContentType="username"
               placeholder="your username"
-              onChangeText={(searchString) => {this.setState({searchString})}}
+              onChangeText={(uname) => {this.setState({username: uname})}}
               underlineColorAndroid="transparent"
             />
         </View>
@@ -76,15 +126,16 @@ class RegisterUserScreen extends Component {
             <TextInput
               style={styles.input}
               textContentType="password"
-              onChangeText={(searchString) => {this.setState({searchString})}}
               underlineColorAndroid="transparent"
               secureTextEntry={true}
               placeholder="your password"
+              onChangeText={(pw) => {this.setState({password: pw})}}
             />
         </View>
         <View style={{height: 50}}>
-            <Button title="Register account" color="pink" onPress={() => this.props.navigation.navigate('Home')}/>
+            <Button title="Register account" color="pink" onPress={register}/>
         </View>
+        <ActivityIndicator size="large" color="white" animating={true} style = {{ opacity : this.state.isLoading ? 1 : 0 }} />
       </ImageBackground>
     );
   }

@@ -85,7 +85,7 @@
             "in": "body",
             "name": "user",
             "description": "the user to create",
-            "required": false,
+            "required": true,
             "schema": {
               "$ref": "#/definitions/User"
             }
@@ -196,11 +196,11 @@
           },
           {
             "in": "body",
-            "name": "user",
+            "name": "UserId",
             "description": "userId of the user joining the group",
             "required": false,
             "schema": {
-              "$ref": "#/definitions/user"
+              "$ref": "#/definitions/UserId"
             }
           }
         ],
@@ -302,13 +302,13 @@
         "lobbyMembers": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/User"
+            "$ref": "#/definitions/UserName"
           }
         },
         "invitedUsers": {
           "type": "array",
           "items": {
-            "$ref": "#/definitions/User"
+            "$ref": "#/definitions/UserName"
           }
         }
       },
@@ -342,7 +342,7 @@
         ]
       }
     },
-    "user": {
+    "UserId": {
       "type": "object",
       "required": [
         "userId"
@@ -352,6 +352,18 @@
           "type": "string",
           "description": "id of the user joining the group",
           "minimum": 1
+        }
+      }
+    },
+    "UserName": {
+      "type": "object",
+      "required": [
+        "userName"
+      ],
+      "properties": {
+        "userName": {
+          "type": "string",
+          "description": "name of the user"
         }
       }
     }

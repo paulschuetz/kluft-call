@@ -97,26 +97,6 @@ paths:
             items:
               $ref: "#/definitions/Game"
       x-swagger-router-controller: "Development"
-  /lobbies:
-    post:
-      summary: create a new lobby
-      description: create a new lobbby
-      operationId: "createLobby"
-      tags:
-      - "development"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "lobby"
-        in: "body"
-        description: "the lobby to create"
-        required: true
-        schema:
-          $ref: "#/definitions/User"
-      responses:
-        200:
-          description: OK
-    
   /lobbies/{id}:
     get:
       tags:
@@ -231,11 +211,11 @@ definitions:
       lobbyMembers:
         type: "array"
         items:
-          $ref: "#/definitions/User"
+          $ref: "#/definitions/UserName"
       invitedUsers:
         type: "array"
         items:
-          $ref: "#/definitions/User"
+          $ref: "#/definitions/UserName"
     example:
       game:
         gameType:
@@ -269,5 +249,4 @@ definitions:
       userName:
         type: "string"
         description: "name of the user"
-        required: true
 

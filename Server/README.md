@@ -11,14 +11,14 @@ $npm start run
 To view the Swagger UI interface:
 
 ```
-open "http://localhost:8080/docs"
+run server and open "http://localhost:8080/docs"
 ```
 
-To edit REST endpoints and definitions
+### To edit REST endpoints and definitions
 
 ```
 $swagger project edit
 ```
 ```
-open "http://localhost:8080/docs"
+and open "http://localhost:8080/docs"
 ```

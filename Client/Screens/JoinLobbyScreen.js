@@ -11,7 +11,9 @@ export default class JoinLobbyScreen extends Component {
 
   constructor(props){
     super(props);
+    this.state = {}
   }
+
 
   render() {
     return (

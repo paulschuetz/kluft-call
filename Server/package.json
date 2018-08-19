@@ -4,7 +4,6 @@
   "description": "Kluft-Call API",
   "main": "index.js",
   "scripts": {
-    "prestart": "npm install",
     "start": "yaml2json ./api/swagger/swagger.yaml > ./api/swagger/swagger.json --pretty && nodemon index.js"
   },
   "keywords": [

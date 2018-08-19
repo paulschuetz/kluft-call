@@ -1,5 +1,5 @@
 import fetchWithTimeout from '../Helper/FetchWithTimeout.js'
-import {UnsuccessfulRequestError, NetworkError} from '../Errors/Errors'
+const Promise = require("bluebird");
 
 const serverPort = 8080
 const serverIp =  "192.168.178.60"
@@ -10,9 +10,8 @@ const userEndpoint = serverUrl + "/users"
 
 // user = {"username":"pablo", "password":"secret"}
 function registerUser(user, timeout){
-  // console.log("register user: " + user)
   return new Promise(function(resolve,reject){
-    return fetchWithTimeout(userEndpoint, {
+    fetchWithTimeout(userEndpoint, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -23,12 +22,15 @@ function registerUser(user, timeout){
         password: user.password
       })
     }, timeout)
-    .then(response=>{
-      if(response.status > 204) reject(new UnsuccessfulRequestError());
+    .then(response => {
+      if(response.status > 204){
+        console.log("above 204")
+        reject();
+      }
+      resolve();
     })
-    .catch(err =>{
-      console.log("bin im catch")
-      reject(new NetworkError(err));
+    .catch(err => {
+      reject();
     })
   })
 }

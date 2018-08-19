@@ -6,6 +6,7 @@ export default class HomeScreen extends Component {
 
   constructor(props){
        super(props);
+       getUsername().then(name=>console.log("username is : " +  name))
    }
 
   // socket = SocketIOClient('http://192.168.178.60:8080');

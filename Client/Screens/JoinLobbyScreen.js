@@ -14,7 +14,6 @@ export default class JoinLobbyScreen extends Component {
     this.state = {}
   }
 
-
   render() {
     return (
       <View style={{

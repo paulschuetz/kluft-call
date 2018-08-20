@@ -97,6 +97,33 @@ paths:
             items:
               $ref: "#/definitions/Game"
       x-swagger-router-controller: "Development"
+  /lobbies:
+    get:
+      tags:
+      - "development"
+      summary: "get all lobbies"
+      operationId: "getLobbies"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "offset"
+        in: "query"
+        description: "number of objects skipped"
+        required: true
+        type: "integer"
+      - name: "limit"
+        in: "query"
+        description: "number of objects returned"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Lobby"
+      x-swagger-router-controller: "Development"
   /lobbies/{id}:
     get:
       tags:

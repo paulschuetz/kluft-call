@@ -15,6 +15,7 @@ module.exports.createUser = function createUser(req, res, next) {
 };
 
 module.exports.getGames = function getGames (req, res, next) {
+  console.log("get games")
   var offset = req.swagger.params['offset'].value;
   var limit = req.swagger.params['limit'].value;
   Development.getGames(offset,limit)
@@ -25,6 +26,18 @@ module.exports.getGames = function getGames (req, res, next) {
       utils.writeJson(res, response);
     });
 };
+
+module.exports.getLobbies = function getLobbies(req,res,next){
+  var offset = req.swagger.params['offset'].value;
+  var limit = req.swagger.params['limit'].value;
+  Development.getLobbies(offset,limit)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+}
 
 module.exports.getLobby = function getLobby (req, res, next) {
   var id = req.swagger.params['id'].value;

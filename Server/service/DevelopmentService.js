@@ -31,33 +31,42 @@ exports.createUser = function(user) {
 exports.getGames = function(offset, limit) {
 return new Promise(function(resolve, reject) {
   models.Game.find().skip(offset).limit(limit).exec(function(err, result) {
-    if (err)
-      reject(err)
+    if (err) reject(err)
     resolve(result)
   })
 });
 }
 
 /**
- * get a lobby
+ * 
+ * @param {number} offset num of elements to skip
+ * @param {number} limit num of elements to return
+ * @returns {Promise} promise that returns {@link models.Lobby} if resolved
+ */
+exports.getLobbies = function(offset, limit) {
+  console.log("getLobbies")
+  return new Promise(function(resolve, reject) {
+    models.Lobby.find().skip(offset).limit(limit).exec(function(err, result) {
+      if (err) reject(err)
+      resolve(result)
+    })
+  });
+  }
+
+/**
  * get a lobby
  *
  * id Integer the lobby id
- * returns Lobby
+ * returns the lobby
  **/
-var getLobby = function(id) {
+exports.getLobby = function(id) {
 return new Promise(function(resolve, reject) {
   models.Lobby.findById(id, function(err, lobby) {
-    if (err) {
-      console.log("Lobby error")
-      reject(err)
-    }
+    if (err) reject(err)
     resolve(lobby)
   })
 })
 };
-
-exports.getLobby = getLobby;
 
 /**
  * get list of users
@@ -78,7 +87,7 @@ return new Promise(function(resolve, reject) {
 });
 }
 
-var getUser = function(userId) {
+exports.getUser = function(userId) {
 return new Promise(function(resolve, reject) {
   models.User.findById(userId, function(err, user) {
     if (err)

@@ -1,4 +1,4 @@
-const Promise = require("bluebird");
+import Promise from 'bluebird';
 
 export default function fetchWithTimeout(url, options, timeout = 3000) {
     return Promise.race([

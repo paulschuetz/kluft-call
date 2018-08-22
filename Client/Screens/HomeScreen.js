@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {AsyncStorage, View, Text, ImageBackground, Button, TextInput, StyleSheet} from 'react-native';
 import {getUsername, persistUsername} from '../persistence.js'
+import Promise from 'bluebird';
 
 export default class HomeScreen extends Component {
 

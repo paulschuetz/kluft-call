@@ -30,7 +30,7 @@ module.exports.getGames = function getGames (req, res, next) {
 module.exports.getLobbies = function getLobbies(req,res,next){
   var offset = req.swagger.params['offset'].value;
   var limit = req.swagger.params['limit'].value;
-  Development.getLobbies(offset,limit)
+  Development.getLobbies(offset, limit)
     .then(function (response) {
       utils.writeJson(res, response);
     })

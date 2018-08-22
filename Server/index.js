@@ -45,8 +45,6 @@ swaggerTools.initializeMiddleware(swaggerDoc, function(middleware) {
   // Serve the Swagger documents and Swagger UI
   app.use(middleware.swaggerUi());
 
-  console.log("TEST")
-
   // Start the server
   var server = http.createServer(app).listen(serverPort, function() {
     console.log('Your server is listening on port %d (http://localhost:%d)', serverPort, serverPort);

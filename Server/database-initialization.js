@@ -26,12 +26,12 @@ Promise.all(
   var summonersRift = new models.GameType({name: "Summoners Rift", numberOfPlayersAllowed: 5})
   summonersRift.save().then(gameType => console.log("GameType created: " + summonersRift))
 
-  var league = new models.Game({name: "League of Legends", gameType: summonersRift})
+  var league = new models.Game({name: "League of Legends", gameType: [summonersRift]})
   league.save().then(league => console.log("Game created: " + league))
 
-  var pabloSuchtFreunde = new models.Lobby({game: league, lobbyMembers: pablo, invitedUsers: luki})
+  var pabloSuchtFreunde = new models.Lobby({game: league, lobbyMembers: [{userName: pablo.name}], invitedUsers: [{userName: luki.name}]})
   pabloSuchtFreunde.save().then(console.log("Lobby created: " + pabloSuchtFreunde))
 
-  var lukiSuchtAuchFriendsToZock = new models.Lobby({game: league, lobbyMembers: luki})
+  var lukiSuchtAuchFriendsToZock = new models.Lobby({game: league, lobbyMembers: [{userName: luki.name}]})
   lukiSuchtAuchFriendsToZock.save().then(console.log("Lobby created: " + lukiSuchtAuchFriendsToZock))
 })

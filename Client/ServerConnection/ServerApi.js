@@ -1,5 +1,5 @@
 import fetchWithTimeout from '../Helper/FetchWithTimeout.js'
-const Promise = require("bluebird");
+import Promise from 'bluebird';
 
 const serverPort = 8080
 const serverIp =  "192.168.178.60"
@@ -8,14 +8,16 @@ const serverUrl = `http://${serverIp}:${serverPort}/supreme-winfos/kluft-call/1.
 const userEndpoint = serverUrl + "/users"
 const lobbyEndpoint = serverUrl + "/lobbies"
 
+console.log("bin in ServerApi.js")
 
 // user = {"username":"pablo", "password":"secret"}
 function registerUser(user, timeout){
+  console.log("register user: " +  JSON.stringify(user))
   return new Promise(function(resolve,reject){
     fetchWithTimeout(userEndpoint, {
       method: 'POST',
       headers: {
-        Accept: 'application/json',
+        'Accept' : 'application/json',
         'Content-Type' : 'application/json'
       },
       body: JSON.stringify({
@@ -39,12 +41,13 @@ function registerUser(user, timeout){
 function getLobbies(offset, limit){
   return new Promise(function (resolve, reject){
     const url = `${lobbyEndpoint}?offset=${offset}&limit=${limit}`
+    console.log("URL: " + url)
     const timeout = 3000;
     const options = 
     {
       method: 'GET',
       headers: {
-        Accept: 'application/json',
+        'Accept' : 'application/json',
         'Content-Type' : 'application/json'
       }
     };
@@ -53,7 +56,9 @@ function getLobbies(offset, limit){
       if(response.status != 200) reject();
       return response.json();
     })
-    .then(lobbies => resolve(lobbies))
+    .then(lobbies => {
+      resolve(lobbies)
+    })
     .catch(err => {
       console.log("Error while fetching lobby data: " + JSON.stringify(err));
       reject(err);

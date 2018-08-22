@@ -6,7 +6,7 @@ import HomeScreen from './Screens/HomeScreen.js'
 import JoinLobbyScreen from './Screens/JoinLobbyScreen.js'
 import CreateLobbyScreen from './Screens/CreateLobbyScreen.js'
 
-const Promise = require("bluebird");
+import Promise from 'bluebird';
 
 const RootStack = createStackNavigator({
   Home: HomeScreen,

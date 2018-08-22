@@ -10,8 +10,7 @@ import {
   StyleSheet
 } from 'react-native';
 import {Icon} from 'react-native-elements';
-const Promise = require("bluebird");
-
+import Promise from 'bluebird';
 import {getUsername, persistUsername} from '../persistence.js';
 import {registerUser} from '../ServerConnection/ServerApi.js';
 
@@ -39,6 +38,7 @@ export default class RegistrationScreen extends Component {
       this.setState(() => {
         return {isLoading: false};
       })
+      console.log("Go to home")
       this.props.navigation.navigate('Home')
     })
     .catch(()=>{

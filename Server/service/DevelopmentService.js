@@ -48,7 +48,10 @@ exports.getLobbies = function(offset, limit) {
   return new Promise(function(resolve, reject) {
     models.Lobby.find().skip(offset).limit(limit).exec(function(err, result) {
       if (err) reject(err)
-      resolve(result)
+      else{
+        console.log("Lobbies: " + JSON.stringify(result));
+        resolve(result);
+      }
     })
   });
   }

@@ -31,4 +31,7 @@ Promise.all(
 
   var pabloSuchtFreunde = new models.Lobby({game: league, lobbyMembers: pablo, invitedUsers: luki})
   pabloSuchtFreunde.save().then(console.log("Lobby created: " + pabloSuchtFreunde))
+
+  var lukiSuchtAuchFriendsToZock = new models.Lobby({game: league, lobbyMembers: luki})
+  lukiSuchtAuchFriendsToZock.save().then(console.log("Lobby created: " + lukiSuchtAuchFriendsToZock))
 })

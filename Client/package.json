@@ -25,6 +25,7 @@
     "react-native": "~0.55.2",
     "react-native-elements": "^0.19.1",
     "react-native-linear-gradient": "^2.0",
+    "react-native-swiper": "^1.5.13",
     "react-navigation": "^2.9.3",
     "socket.io-client": "^2.1.1"
   }

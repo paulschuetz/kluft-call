@@ -18,7 +18,7 @@ run server and open "http://localhost:8080/docs"
 
 Install swagger-cli:
 ```
-$npm install -g swagger-cli
+$npm install -g swagger
 ```
 
 ```

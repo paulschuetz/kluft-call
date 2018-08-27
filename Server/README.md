@@ -15,10 +15,15 @@ run server and open "http://localhost:8080/docs"
 ```
 
 ### To edit REST endpoints and definitions
+```
+install swagger-cli
+$npm install -g swagger-cli
+```
 
 ```
 $swagger project edit
 ```
+
 ```
 and open "http://localhost:8080/docs"
 ```

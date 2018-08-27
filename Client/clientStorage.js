@@ -1,4 +1,5 @@
 import {AsyncStorage} from 'react-native'
+import Promise from 'bluebird';
 
 export const persistUsername = (username) => {
     if(username===null || username==='undefined') reject()

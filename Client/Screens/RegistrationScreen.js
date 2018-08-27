@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {Icon} from 'react-native-elements';
 import Promise from 'bluebird';
-import {getUsername, persistUsername} from '../persistence.js';
+import {getUsername, persistUsername} from '../clientStorage.js';
 import {registerUser} from '../ServerConnection/ServerApi.js';
 
 const registerTimeout = 3000;

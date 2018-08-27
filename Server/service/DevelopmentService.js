@@ -1,9 +1,6 @@
 'use strict';
 var models = require('../models')
-var mongoose = require('mongoose')
-var swaggerMongoose = require('swagger-mongoose');
-var fs = require('fs')
-var bluePromise = require('bluebird')
+var Promise = require('bluebird')
 
 /**
  * create new user
@@ -12,13 +9,24 @@ var bluePromise = require('bluebird')
  * no response value expected for this operation
  **/
 exports.createUser = function(user) {
-  console.log(`createUser(${JSON.stringify(user)})`)
+  console.log(`createUser(${JSON.stringify(user)})`);
   return new Promise(function(resolve, reject) {
-    return models.User.create(user, function(err, newUser){
+    models.User.create(user, function(err, newUser){
       if(err) reject({"error": "User already exists!"})
       else resolve(newUser)
     })
   })
+}
+
+
+exports.createLobby = function(lobby) {
+  console.log(`creatLobby(${JSON.stringify(lobby)})`);
+  return new Promise(function(resolve, reject) {
+    models.Lobby.create(lobby, function(err, newLobby){
+      if(err) reject({"error": "Lobby already exists!"});
+      else resolve(newLobby);
+    });
+  });
 }
 
 /**
@@ -49,7 +57,6 @@ exports.getLobbies = function(offset, limit) {
     models.Lobby.find().skip(offset).limit(limit).exec(function(err, result) {
       if (err) reject(err)
       else{
-        console.log("Lobbies: " + JSON.stringify(result));
         resolve(result);
       }
     })
@@ -70,6 +77,37 @@ return new Promise(function(resolve, reject) {
   })
 })
 };
+
+
+/**
+ * add a user to a lobby
+ * add a user-reference to a lobby
+ *
+ * id Integer id of the lobby the user joins
+ * user User userId of the user joining the group (optional)
+ * returns Lobby
+ **/
+exports.joinLobby = function(id, user) {
+  console.log(`joinLobby(lobbyId:${id},userId:${user.userId})`)
+  return new Promise(function(resolve, reject) {
+    return bluePromise.join(getLobby(id), getUser(user.userId), function(lobby, user) {
+      console.log("lobby: " + lobby);
+      console.log("user: " + user)
+      return models.Lobby.findOneAndUpdate({
+        _id: id
+      }, {
+        "$addToSet": {
+          "lobbyMembers": user
+        }
+      }, {new:true}, function(err, updatedLobby) {
+        if (err)
+          reject(err)
+        console.log(updatedLobby)
+        resolve(updatedLobby)
+      })
+    })
+  });
+  }
 
 /**
  * get list of users
@@ -98,34 +136,4 @@ return new Promise(function(resolve, reject) {
     resolve(user)
   })
 })
-}
-
-/**
- * add a user to a lobby
- * add a user-reference to a lobby
- *
- * id Integer id of the lobby the user joins
- * user User userId of the user joining the group (optional)
- * returns Lobby
- **/
-exports.joinLobby = function(id, user) {
-console.log(`joinLobby(lobbyId:${id},userId:${user.userId})`)
-return new Promise(function(resolve, reject) {
-  return bluePromise.join(getLobby(id), getUser(user.userId), function(lobby, user) {
-    console.log("lobby: " + lobby);
-    console.log("user: " + user)
-    return models.Lobby.findOneAndUpdate({
-      _id: id
-    }, {
-      "$addToSet": {
-        "lobbyMembers": user
-      }
-    }, {new:true}, function(err, updatedLobby) {
-      if (err)
-        reject(err)
-      console.log(updatedLobby)
-      resolve(updatedLobby)
-    })
-  })
-});
 }

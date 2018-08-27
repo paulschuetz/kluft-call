@@ -6,14 +6,12 @@ import HomeScreen from './Screens/HomeScreen.js'
 import JoinLobbyScreen from './Screens/JoinLobbyScreen.js'
 import CreateLobbyScreen from './Screens/CreateLobbyScreen.js'
 
-import Promise from 'bluebird';
-
 const RootStack = createStackNavigator({
   Home: HomeScreen,
   CreateLobby: CreateLobbyScreen,
   JoinLobby: JoinLobbyScreen,
   RegisterUser: RegistrationScreen
-}, {initialRouteName: 'RegisterUser',  headerMode:'none'});
+}, {initialRouteName: 'CreateLobby',  headerMode:'none'});
 
 export default class App extends React.Component {
   render() {

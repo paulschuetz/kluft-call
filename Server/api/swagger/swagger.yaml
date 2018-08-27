@@ -64,8 +64,8 @@ paths:
         schema:
           $ref: "#/definitions/User"
       responses:
-        200:
-          description: "OK"
+        204:
+          description: "Created"
       x-swagger-router-controller: "Development"
   /games:
     get:
@@ -123,6 +123,26 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/Lobby"
+      x-swagger-router-controller: "Development"
+    post:
+      tags:
+      - "development"
+      summary: "create a new lobby resource"
+      operationId: "createLobby"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "lobby"
+        in: body
+        description: the lobby to be created
+        required: true
+        schema: 
+          $ref: "#/definitions/Lobby"
+      responses:
+        204:
+          description: "Created"
+          schema:
+            $ref: "#/definitions/Lobby"
       x-swagger-router-controller: "Development"
   /lobbies/{id}:
     get:

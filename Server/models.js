@@ -17,8 +17,6 @@ models.User.schema.path('name').validate({
   message: 'There is already an user with this name'
 })
 
-// models.User = mongoose.model('User', models.User.schema)
-
 exports.User = models.User;
 exports.Game = models.Game;
 exports.GameType = models.GameType;

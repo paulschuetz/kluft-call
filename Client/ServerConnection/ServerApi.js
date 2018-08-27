@@ -7,11 +7,10 @@ const serverUrl = `http://${serverIp}:${serverPort}/supreme-winfos/kluft-call/1.
 // REST API endpoints
 const userEndpoint = serverUrl + "/users"
 const lobbyEndpoint = serverUrl + "/lobbies"
-
-console.log("bin in ServerApi.js")
+const gamesEndpoint = serverUrl + "/games"
 
 // user = {"username":"pablo", "password":"secret"}
-function registerUser(user, timeout){
+registerUser = (user, timeout) => {
   console.log("register user: " +  JSON.stringify(user))
   return new Promise(function(resolve,reject){
     fetchWithTimeout(userEndpoint, {
@@ -26,22 +25,21 @@ function registerUser(user, timeout){
       })
     }, timeout)
     .then(response => {
-      if(response.status > 204){
-        console.log("above 204")
-        reject();
-      }
-      resolve();
+      console.log("status: " + response.status)
+      if(response.status != 204) reject();
+      return response.json();
     })
+    .then(json=> resolve(json))
     .catch(err => {
+      console.log("ERROR: " + JSON.stringify(err));
       reject();
     })
   })
 }
 
-function getLobbies(offset, limit){
+getLobbies = (offset, limit) => {
   return new Promise(function (resolve, reject){
     const url = `${lobbyEndpoint}?offset=${offset}&limit=${limit}`
-    console.log("URL: " + url)
     const timeout = 3000;
     const options = 
     {
@@ -51,6 +49,7 @@ function getLobbies(offset, limit){
         'Content-Type' : 'application/json'
       }
     };
+
     fetchWithTimeout(url, options, timeout)
     .then(response => {
       if(response.status != 200) reject();
@@ -66,4 +65,52 @@ function getLobbies(offset, limit){
   })
 }
 
-export {registerUser, getLobbies}
+function createLobby(lobby){
+  return new Promise(function(resolve, reject){
+
+    const url = lobbyEndpoint;
+    const timeout = 3000;
+    const options = {
+      method: 'POST',
+      headers: {
+        'Accept' : 'application/json',
+        'Content-Type' : 'application/json'
+      },
+      body: JSON.stringify(lobby)
+    };
+
+    fetch(url, options)
+    .then(response => response.json())
+    .then(json => resolve(json))
+    .catch(error => {
+      console.log("Error: " + error)
+      reject(error)
+    });
+  })
+}
+
+getGames = (offset, limit) => {
+  return new Promise(function(resolve, reject){
+    const url = `${gamesEndpoint}?offset=${offset}&limit=${limit}`;
+    const timeout = 3000;
+    const options = {
+      method: 'GET',
+      headers: {
+        'Accept' : 'application/json',
+        'Content-Type' : 'application/json'
+      }
+    };
+    fetchWithTimeout(url, options, timeout)
+    .then(response=>{
+      if(response.status != 200) reject();
+      return response.json();
+    })
+    .then(lobbies => resolve(lobbies))
+    .catch(err=>{
+      console.log("error while fetching games: " + JSON.stringify(err));
+      reject();
+    })
+  });
+}
+
+export {registerUser, getLobbies, getGames, createLobby}

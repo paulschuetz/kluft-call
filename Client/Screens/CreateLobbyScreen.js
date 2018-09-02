@@ -78,10 +78,13 @@ export default class CreateLobbyScreen extends Component {
 
     getUsername()
     .then(username=>{
-      const lobby = {game:game, invitedUsers:[], lobbyMembers:[{userName: username}]};
+      const lobby = {"game":game, "invitedUsers":[], "lobbyMembers":[{userName: username}]};
       return createLobby(lobby);
     })
-    .then(lobby => console.log("created lobby: " + JSON.stringify(lobby)))
+    .then(lobby => {
+      console.log("success!");
+      this.props.navigation.navigate('Lobby', {"lobby": lobby})
+    })
     .catch(err => console.log("something went wrong while creating the lobby: " + JSON.stringify(err)));
   }
   
@@ -93,7 +96,6 @@ export default class CreateLobbyScreen extends Component {
       <Text style={{textAlign: 'center'}}>Choose the Gametype</Text>
       {this.renderGameTypeSwiper()}
       <Button
-        style={{flexBasis: 40}}
         onPress= {this.handleButtonClick}
         title="Let's game"
         color="#841584"

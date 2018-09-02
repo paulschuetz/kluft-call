@@ -1,20 +1,45 @@
 import {AsyncStorage} from 'react-native'
-import Promise from 'bluebird';
 
-export const persistUsername = (username) => {
-    if(username===null || username==='undefined') reject()
-    return AsyncStorage.setItem('username', username);
-}
-
-export const getUsername = async() => {
-  let username;
-  try {
-    username = await AsyncStorage.getItem('username');
-    if (username === null) {
-      username = "Player";
-    }
-  } catch (error) {
-    username = "Player"
+export const persistUserData = async(user) => {
+  const userName = user.name;
+  const userId = user._id;
+  if(userName === 'undefined' || userId === 'undefined') throw new Error("empty input parameter");
+  try{
+    AsyncStorage.setItem("userName", userName);
+    AsyncStorage.setItem("userId", userId);
   }
-  return username;
+  catch(err){
+    console.log("Failed writing user data to client storage: " + JSON.stringify(err));
+  }
 }
+
+export async function getUsername() {
+    let username;
+    try {
+      username = await AsyncStorage.getItem('userName');
+      if (username === null) {
+        username = "Player";
+      }
+    } catch (error) {
+      username = "Player"
+    }
+    return username;
+}
+
+export const getUserId = () => {
+  return AsyncStorage.getItem('userId');
+}
+
+// Helper
+
+const persistUserId = (userId) => {
+  if(userId===null || userId==='undefined') throw new Error("no userId provided")
+  return AsyncStorage.setItem('userId', userId);
+}
+
+
+const persistUsername = (username) => {
+  if(username===null || username==='undefined') throw new Error("no username provided")
+  return AsyncStorage.setItem('username', username);
+}
+  

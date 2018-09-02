@@ -1,13 +1,10 @@
 import React, {Component} from 'react';
-import {AsyncStorage, View, Text, ImageBackground, Button, TextInput, StyleSheet} from 'react-native';
-import {getUsername, persistUsername} from '../clientStorage.js'
-import Promise from 'bluebird';
+import {View,ImageBackground, Button} from 'react-native';
 
 export default class HomeScreen extends Component {
 
   constructor(props){
        super(props);
-       getUsername().then(name=>console.log("username is : " +  name))
    }
 
   // socket = SocketIOClient('http://192.168.178.60:8080');
@@ -24,7 +21,8 @@ export default class HomeScreen extends Component {
         }}>
         <Button title="Create Lobby" color="pink" onPress={() => this.props.navigation.navigate('CreateLobby')}/>
       </View>
-      <Button title="Join Lobby" color="pink" onPress={() => this.props.navigation.navigate('JoinLobby')}/>
+      <Button title="Join Lobby" color="pink" onPress={() => this.props.navigation.navigate('JoinLobby')}
+      />
     </ImageBackground>);
   }
 }

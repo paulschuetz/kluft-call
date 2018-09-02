@@ -12,6 +12,7 @@ export default class LobbyList extends Component {
     this.state = {
       lobbyData:[]
     };
+    this.handleListUpdate = this.handleListUpdate.bind(this);
   }
 
   componentDidMount(){
@@ -23,6 +24,10 @@ export default class LobbyList extends Component {
     this.setState({lobbyData: lobbies})
   }
 
+  handleListUpdate(){
+    this.fetchData();
+  }
+
   render() {
     return (
       <List>
@@ -31,7 +36,7 @@ export default class LobbyList extends Component {
           keyExtractor={(x, i) => i.toString()}
           renderItem = 
               {({ item }) => 
-              <LobbyListElement lobbyInfo={item}/>
+              <LobbyListElement navigation={this.props.navigation} lobbyInfo={item} updateListHandler = {this.handleListUpdate}/>
             }
         />
       </List>

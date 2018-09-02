@@ -266,12 +266,20 @@
           },
           {
             "in": "body",
-            "name": "UserId",
-            "description": "userId of the user joining the group",
-            "required": false,
+            "name": "user",
             "schema": {
-              "$ref": "#/definitions/UserId"
-            }
+              "type": "object",
+              "required": [
+                "userId"
+              ],
+              "properties": {
+                "userId": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "userId of the user joining the group",
+            "required": true
           }
         ],
         "responses": {
@@ -403,19 +411,6 @@
             "username": "Snacksen"
           }
         ]
-      }
-    },
-    "UserId": {
-      "type": "object",
-      "required": [
-        "userId"
-      ],
-      "properties": {
-        "userId": {
-          "type": "string",
-          "description": "id of the user joining the group",
-          "minimum": 1
-        }
       }
     },
     "UserName": {

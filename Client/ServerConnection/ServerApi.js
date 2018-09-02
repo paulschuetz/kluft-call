@@ -26,10 +26,10 @@ registerUser = (user, timeout) => {
     }, timeout)
     .then(response => {
       console.log("status: " + response.status)
-      if(response.status != 204) reject();
+      if(response.status != 201) reject();
       return response.json();
     })
-    .then(json=> resolve(json))
+    .then(user=> resolve(user))
     .catch(err => {
       console.log("ERROR: " + JSON.stringify(err));
       reject();
@@ -62,6 +62,28 @@ getLobbies = (offset, limit) => {
       console.log("Error while fetching lobby data: " + JSON.stringify(err));
       reject(err);
     })
+  })
+}
+
+function joinLobby(lobbyId, userId){
+  return new Promise(function (resolve, reject){
+    const url = `${lobbyEndpoint}/${lobbyId}/users`
+    const timeout = 3000;
+    const body = {"userId": userId};
+    const options = 
+    {
+      method: 'PATCH',
+      headers: {
+        'Accept' : 'application/json',
+        'Content-Type' : 'application/json'
+      },
+      body: JSON.stringify(body)
+    };
+    
+    fetchWithTimeout(url, options, timeout)
+    .then(response => response.json())
+    .then(lobby => resolve(lobby))
+    .catch(err => reject(err))
   })
 }
 
@@ -113,4 +135,4 @@ getGames = (offset, limit) => {
   });
 }
 
-export {registerUser, getLobbies, getGames, createLobby}
+export {registerUser, getLobbies, getGames, createLobby, joinLobby}

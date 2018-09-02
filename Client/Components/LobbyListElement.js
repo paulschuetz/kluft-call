@@ -1,12 +1,21 @@
 import React, { Component } from 'react';
 import {ListItem} from 'react-native-elements'
-import Promise from 'bluebird';
+import {joinLobby} from '../ServerConnection/ServerApi'
+import {getUserId} from '../clientStorage'
 
 
 export default class LobbyListElement extends Component {
 
-  constructor(props){
-    super(props);
+  joinLobby = (lobbyId) => {
+    getUserId()
+    .then(userId => joinLobby(lobbyId, userId))
+    .then(lobby => {
+      // go to lobby screen and send new lobby data
+      this.props.navigation.navigate('Lobby', {"lobby": lobby});
+      // update list in parent 'LobbyList' component
+      this.props.updateListHandler();
+    })
+    .catch(err => console.log("something went wrong while joining lobby: " + err))
   }
 
   render() {
@@ -23,6 +32,7 @@ export default class LobbyListElement extends Component {
         subtitle = {`Created by ${lobbyCreatorName}`}
         rightTitle = {`${lobbyMemberCount}/${lobbySize}`}
         rightContentContainerStyle= {{"width":"30"}}
+        onPress = {() => this.joinLobby(lobbyInfo._id)}
       />
     );
   }

@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {Icon} from 'react-native-elements';
 import Promise from 'bluebird';
-import {getUsername, persistUsername} from '../clientStorage.js';
+import {persistUserData, getUsername, getUserId} from '../clientStorage.js';
 import {registerUser} from '../ServerConnection/ServerApi.js';
 
 const registerTimeout = 3000;
@@ -33,8 +33,11 @@ export default class RegistrationScreen extends Component {
       return {isLoading: true}
     });
     registerUser({username: this.state.username, password: this.state.password}, registerTimeout)
-    .then(() => persistUsername(this.state.username))
-    .then(()=>{
+    .then(user => persistUserData(user))
+    .then(async() => {
+      const username = await getUsername();
+      const userid = await getUserId();
+      console.log(`User data persisted: name: ${username} id: ${userid}`);
       this.setState(() => {
         return {isLoading: false};
       })

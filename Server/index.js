@@ -54,6 +54,14 @@ swaggerTools.initializeMiddleware(swaggerDoc, function(middleware) {
   // socket connection
   var websocket = socketio(server);
   websocket.on('connection', (socket) => {
-    console.log('A client just joined on', socket.id);
+    socket.on('join room', (lobby) => {
+      const roomId = lobby._id;
+      console.log(`socket ${socket.id} joins room/lobby ${roomId}`)
+      socket.join(roomId);
+      socket.to(roomId).emit("new user joined", lobby);
+    });
+    socket.on('disconnect',(reason)=>{
+      console.log(`socket ${socket.id} disconnected for reason: ${reason}`);
+    })
   });
 });

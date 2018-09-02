@@ -2,12 +2,13 @@
 
 var utils = require('../utils/writer.js');
 var Development = require('../service/DevelopmentService');
+var Promise = require('bluebird');
 
 module.exports.createUser = function createUser(req, res, next) {
   var user = req.swagger.params['user'].value;
   Development.createUser(user)
     .then(function (response) {
-      utils.writeJson(res, response, 204);
+      utils.writeJson(res, response, 201);
     })
     .catch(function (response) {
       utils.writeJson(res, response)
@@ -51,8 +52,6 @@ module.exports.createLobby = function getLobbies(req, res,next){
     });
 }
 
-
-
 module.exports.getLobby = function getLobby (req, res, next) {
   var id = req.swagger.params['id'].value;
   Development.getLobby(id)
@@ -79,7 +78,7 @@ module.exports.getUsers = function getUsers (req, res, next) {
 module.exports.joinLobby = function joinLobby (req, res, next) {
   var id = req.swagger.params['id'].value;
   var user = req.swagger.params['user'].value;
-  Development.joinLobby(id,user)
+  Development.joinLobby(id, user.userId)
     .then(function (response) {
       utils.writeJson(res, response);
     })

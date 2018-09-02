@@ -183,11 +183,16 @@ paths:
         type: "string"
         minimum: 1
       - in: "body"
-        name: "UserId"
-        description: "userId of the user joining the group"
-        required: false
+        name: "user"
         schema:
-          $ref: "#/definitions/UserId"
+          type: object
+          required:
+            - userId
+          properties:
+            userId:
+              type: string
+        description: "userId of the user joining the group"
+        required: true
       responses:
         200:
           description: "user successfully joined the lobby"
@@ -274,15 +279,6 @@ definitions:
       invitedUsers:
       - username: "Latak"
       - username: "Snacksen"
-  UserId:
-    type: "object"
-    required:
-    - "userId"
-    properties:
-      userId:
-        type: "string"
-        description: "id of the user joining the group"
-        minimum: 1
   UserName:
     type: "object"
     required:

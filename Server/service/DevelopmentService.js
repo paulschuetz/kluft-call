@@ -20,7 +20,7 @@ exports.createUser = function(user) {
 
 
 exports.createLobby = function(lobby) {
-  console.log(`creatLobby(${JSON.stringify(lobby)})`);
+  console.log(`createLobby(${JSON.stringify(lobby)})`);
   return new Promise(function(resolve, reject) {
     models.Lobby.create(lobby, function(err, newLobby){
       if(err) reject({"error": "Lobby already exists!"});
@@ -37,12 +37,13 @@ exports.createLobby = function(lobby) {
  * returns List
  **/
 exports.getGames = function(offset, limit) {
-return new Promise(function(resolve, reject) {
-  models.Game.find().skip(offset).limit(limit).exec(function(err, result) {
-    if (err) reject(err)
-    resolve(result)
-  })
-});
+  console.log(`getGame(offset=${offset}, limit=${limit})`);
+  return new Promise(function(resolve, reject) {
+    models.Game.find().skip(offset).limit(limit).exec(function(err, result) {
+      if (err) reject(err)
+      resolve(result)
+    })
+  });
 }
 
 /**
@@ -52,7 +53,7 @@ return new Promise(function(resolve, reject) {
  * @returns {Promise} promise that returns {@link models.Lobby} if resolved
  */
 exports.getLobbies = function(offset, limit) {
-  console.log("getLobbies")
+  console.log(`getLobbies(offset=${offset}, limit=${limit})`);
   return new Promise(function(resolve, reject) {
     models.Lobby.find().skip(offset).limit(limit).exec(function(err, result) {
       if (err) reject(err)
@@ -64,22 +65,6 @@ exports.getLobbies = function(offset, limit) {
   }
 
 /**
- * get a lobby
- *
- * id Integer the lobby id
- * returns the lobby
- **/
-exports.getLobby = function(id) {
-return new Promise(function(resolve, reject) {
-  models.Lobby.findById(id, function(err, lobby) {
-    if (err) reject(err)
-    resolve(lobby)
-  })
-})
-};
-
-
-/**
  * add a user to a lobby
  * add a user-reference to a lobby
  *
@@ -87,27 +72,40 @@ return new Promise(function(resolve, reject) {
  * user User userId of the user joining the group (optional)
  * returns Lobby
  **/
-exports.joinLobby = function(id, user) {
-  console.log(`joinLobby(lobbyId:${id},userId:${user.userId})`)
-  return new Promise(function(resolve, reject) {
-    return bluePromise.join(getLobby(id), getUser(user.userId), function(lobby, user) {
+exports.joinLobby = function(lobbyId, userId) {
+  console.log(`joinLobby(lobbyId: ${lobbyId}, userId: ${userId})`);
+  return new Promise(function(resolve, reject){
+    Promise.join(getLobby(lobbyId), getUser(userId), function(lobby, user) {
       console.log("lobby: " + lobby);
       console.log("user: " + user)
-      return models.Lobby.findOneAndUpdate({
-        _id: id
-      }, {
-        "$addToSet": {
-          "lobbyMembers": user
+      const userInRightFormat = {_id: user._id, userName: user.name};
+      models.Lobby.findOneAndUpdate(
+        {
+          _id: lobbyId
+        }, 
+        {
+          "$addToSet": {
+            "lobbyMembers": userInRightFormat
+          }
+        }, 
+        {
+          new:true
+        }, 
+        function(err, updatedLobby){
+          if (err){
+            console.log("error " +  JSON.stringify(err))
+            reject(err)
+          }
+          resolve(updatedLobby)
         }
-      }, {new:true}, function(err, updatedLobby) {
-        if (err)
-          reject(err)
-        console.log(updatedLobby)
-        resolve(updatedLobby)
-      })
+      );
+    })
+    .catch(err => {
+      console.log("ERROR: " + JSON.stringify(err))
+      reject(err)
     })
   });
-  }
+}
 
 /**
  * get list of users
@@ -118,22 +116,35 @@ exports.joinLobby = function(id, user) {
  * returns List
  **/
 exports.getUsers = function(offset, limit) {
-return new Promise(function(resolve, reject) {
-  models.User.find().skip(offset).limit(limit).exec(function(err, users) {
-    if (err)
-      rejecct(err)
-    else
-      resolve(users)
-  })
-});
+  console.log(`getUsers(offset=${offset}, limit=${limit})`);
+  return new Promise(function(resolve, reject) {
+    models.User.find().skip(offset).limit(limit).exec(function(err, users) {
+      if (err)
+        rejecct(err)
+      else
+        resolve(users)
+    })
+  });
 }
 
-exports.getUser = function(userId) {
-return new Promise(function(resolve, reject) {
-  models.User.findById(userId, function(err, user) {
-    if (err)
-      reject(err)
-    resolve(user)
+// HELPERS
+
+function getLobby(id) {
+  console.log(`getLobby(lobbyId=${id})`)
+  return new Promise(function(resolve, reject) {
+    models.Lobby.findById(id, function(err, lobby) {
+      if (err) reject(err)
+      resolve(lobby)
+    })
   })
-})
+};
+
+function getUser(userId) {
+  console.log(`getUser(userId=${userId})`)
+  return new Promise(function(resolve, reject) {
+    models.User.findById(userId, function(err, user) {
+      if (err) reject(err)
+      resolve(user)
+    })
+  })
 }

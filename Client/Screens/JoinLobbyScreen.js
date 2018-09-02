@@ -18,7 +18,7 @@ export default class JoinLobbyScreen extends Component {
           // alignItems: "center"
         }}>
           <Text>JoinLobby Screen</Text>
-          <LobbyList/>
+          <LobbyList navigation={this.props.navigation}/>
         </View>
     );
     

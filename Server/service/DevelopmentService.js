@@ -107,9 +107,54 @@ exports.joinLobby = function(lobbyId, userId) {
   });
 }
 
+// remove a user from the lobbyMembers Collection and ultimatively remove the lobby if the lobby is empty
+exports.leaveLobby = function(lobbyId, userId){
+  console.log(`leaveLobby(lobbyId=${lobbyId}, userId=${userId})`);
+  return new Promise(function(resolve, reject){
+      models.Lobby.findOneAndUpdate(
+        {
+          _id: lobbyId
+        }, 
+        {
+          "$pull": {
+            "lobbyMembers": {"_id": userId}
+          }
+        }, 
+        {
+          new:true
+        }, 
+        function(err, updatedLobby){
+          if (err){
+            console.log("error " +  JSON.stringify(err))
+            reject(err)
+          }
+          console.log(`deleted user ${userId} from lobby ${lobbyId}. New lobby member count: ${updatedLobby.lobbyMembers.length}/${updatedLobby.game[0].gameType[0].numberOfPlayersAllowed}`);
+          // check if lobby is empty
+          if(updatedLobby.lobbyMembers.length<1){
+            models.Lobby.remove(
+              {
+                _id: lobbyId
+              },
+              function(err){
+                if(err){
+                  console.log("something went wrong while deleting the lobby " + JSON.stringify(err));
+                  reject(new Error("Database error while deleting lobby"))
+                }
+                else{
+                  console.log("successfully deleted lobby " + lobbyId);
+                  resolve();
+                }
+              }
+            )
+          }
+          resolve(updatedLobby)
+        }
+      );
+  });
+}
+
 /**
  * get list of users
- * get collection of users
  *
  * offset Integer The number of items to skip before starting to collect the result (optional)
  * limit Integer The number of items to return (optional)

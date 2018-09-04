@@ -86,3 +86,17 @@ module.exports.joinLobby = function joinLobby (req, res, next) {
       utils.writeJson(res, response);
     });
 };
+
+module.exports.leaveLobby = function leaveLobby (req, res, next) {
+  console.log("leave lobby controller")
+  var id = req.swagger.params['id'].value;
+  var userId = req.swagger.params['userId'].value;
+  Development.leaveLobby(id, userId)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+

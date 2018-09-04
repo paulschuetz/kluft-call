@@ -218,12 +218,13 @@ paths:
         in: "query"
         description: "userId of the user to be deleted from the lobby"
         required: true
-        type: "integer"
+        type: "string"
       responses:
         200:
           description: "user successfully left the lobby"
           schema:
             $ref: "#/definitions/Lobby"
+      x-swagger-router-controller: "Development"
 definitions:
   User:
     type: "object"

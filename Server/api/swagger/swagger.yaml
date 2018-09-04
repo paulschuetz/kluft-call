@@ -199,6 +199,31 @@ paths:
           schema:
             $ref: "#/definitions/Lobby"
       x-swagger-router-controller: "Development"
+    delete:
+      tags:
+      - "development"
+      summary: "remove a user from a lobby"
+      description: "remove a user from a lobby"
+      operationId: "leaveLobby"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "id of the lobby the user joins"
+        required: true
+        type: "string"
+        minimum: 1
+      - name: "userId"
+        in: "query"
+        description: "userId of the user to be deleted from the lobby"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "user successfully left the lobby"
+          schema:
+            $ref: "#/definitions/Lobby"
 definitions:
   User:
     type: "object"

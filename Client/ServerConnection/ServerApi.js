@@ -1,9 +1,8 @@
 import fetchWithTimeout from '../Helper/FetchWithTimeout.js'
 import Promise from 'bluebird';
+import {SERVER_IP, SERVER_PORT} from '../constants'
 
-const serverPort = 8080
-const serverIp =  "192.168.178.60"
-const serverUrl = `http://${serverIp}:${serverPort}/supreme-winfos/kluft-call/1.0.0`
+const serverUrl = `http://${SERVER_IP}:${SERVER_PORT}/supreme-winfos/kluft-call/1.0.0`
 // REST API endpoints
 const userEndpoint = serverUrl + "/users"
 const lobbyEndpoint = serverUrl + "/lobbies"

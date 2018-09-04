@@ -10,6 +10,7 @@ import {
 
 import SocketClient from 'socket.io-client'
 import { Button } from 'react-native-elements';
+import {SERVER_IP, SERVER_PORT} from '../constants';
 
 
 export default class LobbyScreen extends Component {
@@ -21,7 +22,8 @@ export default class LobbyScreen extends Component {
         };
     
         // socket connection
-        let socket = SocketClient("http://192.168.178.60:8080").connect();
+        const socketUrl = `http://${SERVER_IP}:${SERVER_PORT}`
+        let socket = SocketClient(socketUrl).connect();
         // join room of lobby
         socket.on('connect', () => {
             socket.emit('join room', this.state.lobby)
@@ -32,7 +34,6 @@ export default class LobbyScreen extends Component {
             // overwrite lobby element and re-render;
             this.setState({lobby: lobby});
         });
-
         this.state.socket = socket;
     }
 

@@ -7,10 +7,13 @@ import {
     View,
     BackHandler
 } from 'react-native';
+import { Button } from 'react-native-elements';
 
 import SocketClient from 'socket.io-client'
-import { Button } from 'react-native-elements';
+
 import {SERVER_IP, SERVER_PORT} from '../constants';
+import {leaveLobby} from '../ServerConnection/ServerApi';
+import {getUserId} from '../clientStorage';
 
 
 export default class LobbyScreen extends Component {
@@ -56,8 +59,14 @@ export default class LobbyScreen extends Component {
         }
     };
 
-    leaveLobby = () => {
+    leaveLobby = async() => {
         // 1. Delete User from Lobby from Server (if it was the last user delete lobby);
+        const lobbyId = this.state.lobby._id;
+        const userId = await getUserId();
+        const newLobby = await leaveLobby(lobbyId, userId);
+        console.log("new lobby: " + newLobby);
+        //if lobby object is empty
+
         // 2. Send lobby-users a message someone has leaved the lobby -> update their list of users
         // 3. Update lobby-list in join lobby screen
         // 4. Go back to Join-Lobby Screen?

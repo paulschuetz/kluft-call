@@ -134,4 +134,25 @@ getGames = (offset, limit) => {
   });
 }
 
-export {registerUser, getLobbies, getGames, createLobby, joinLobby}
+leaveLobby = (lobbyId, userId) => {
+  return new Promise(function(resolve,reject){
+    const url = `${lobbyEndpoint}/${lobbyId}/users?userId=${userId}`
+    console.log("leaveLobby: " + url);
+    const timeout=3000;
+    const options = {
+      method: 'DELETE',
+      headers: {
+        'Accept' : 'application/json',
+        'Content-Type' : 'application/json'
+      }
+    };
+    fetchWithTimeout(url, options, timeout)
+    .then(response=> {
+      if(response.status>=400)
+        reject(new Error("response code 400 or higher"));
+      else resolve();
+    })
+  })
+}
+
+export {registerUser, getLobbies, getGames, createLobby, joinLobby,leaveLobby}

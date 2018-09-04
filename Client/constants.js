@@ -1,4 +1,4 @@
-const SERVER_IP =  "192.168.178.64";
+const SERVER_IP =  "172.29.201.77";
 const SERVER_PORT = "8080";
 
 module.exports = {

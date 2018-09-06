@@ -14,38 +14,40 @@ import SocketClient from 'socket.io-client'
 import {SERVER_IP, SERVER_PORT} from '../constants';
 import {leaveLobby} from '../ServerConnection/ServerApi';
 import {getUserId} from '../clientStorage';
+import {getSocket} from '../ServerConnection/Socket'
 
 
 export default class LobbyScreen extends Component {
 
     constructor(props) {
         super(props);
-        console.log("lobby in constructor: " + JSON.stringify(this.props.navigation.state.params.lobby))
+        
         this.state = {
             lobby: this.props.navigation.state.params.lobby,
         };
-    
-        // socket connection
-        const socketUrl = `http://${SERVER_IP}:${SERVER_PORT}`;
-        let socket = SocketClient(socketUrl).connect();
-        // join room of lobby
-        socket.on('connect', () => {
-            socket.emit('join lobby', this.state.lobby)
-        });
-        // if someone joined the lobby uupdate the lobby data
-        socket.on('update', (lobby) => {
-            console.log("user joined lobby. Lobby now looks like " + JSON.stringify(lobby));
-            // overwrite lobby element and re-render;
-            this.setState({lobby: lobby});
-        });
-        this.state.socket = socket;
     }
 
     componentDidMount() {
         BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+
+        // configure socket events
+        let socket = getSocket();
+        console.log("mounted lobbyscreen with socket: " +  socket.id)
+        // join room of lobby
+        socket.emit('join lobby', this.state.lobby)
+        // if someone joined the lobby update the lobby data
+        socket.on('update', (lobby) => {
+            console.log("socket " +socket.id +": user joined lobby. Lobby now looks like " + JSON.stringify(lobby));
+            // overwrite lobby element and re-render;
+            this.setState({lobby: lobby});
+        });
+        
     }
 
     componentWillUnmount(){
+        let socket = getSocket();
+        // remove listeners !!!
+        socket.off('update')
         BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
     }
 
@@ -59,7 +61,7 @@ export default class LobbyScreen extends Component {
         const userId = await getUserId();
         const newLobby = await leaveLobby(lobbyId, userId);
         // 2. Send lobby-users a message someone has leaved the lobby -> update their list of users
-        let socket = this.state.socket;
+        let socket = getSocket();
         socket.emit('leave lobby');
         // 3. Go back to Join-Lobby Screen?
         this.props.navigation.pop(1);

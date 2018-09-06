@@ -56,6 +56,7 @@ swaggerTools.initializeMiddleware(swaggerDoc, function(middleware) {
   // socket connection
   var websocket = socketio(server);
   websocket.on('connection', (socket) => {
+    console.log("socket " + socket.id + " connected")
     socket.on('join lobby', (lobby) => {
       const roomId = lobby._id;
       console.log(`socket ${socket.id} joins room/lobby ${roomId}`)

@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
 import {View,ImageBackground, Button} from 'react-native';
 
+import {isRegistered} from '../clientStorage';
+
 export default class HomeScreen extends Component {
 
   constructor(props){
        super(props);
+       isRegistered();
    }
 
   // socket = SocketIOClient('http://192.168.178.60:8080');

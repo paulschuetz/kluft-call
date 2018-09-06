@@ -20,19 +20,20 @@ export default class LobbyScreen extends Component {
 
     constructor(props) {
         super(props);
+        console.log("lobby in constructor: " + JSON.stringify(this.props.navigation.state.params.lobby))
         this.state = {
             lobby: this.props.navigation.state.params.lobby,
         };
     
         // socket connection
-        const socketUrl = `http://${SERVER_IP}:${SERVER_PORT}`
+        const socketUrl = `http://${SERVER_IP}:${SERVER_PORT}`;
         let socket = SocketClient(socketUrl).connect();
         // join room of lobby
         socket.on('connect', () => {
-            socket.emit('join room', this.state.lobby)
+            socket.emit('join lobby', this.state.lobby)
         });
         // if someone joined the lobby uupdate the lobby data
-        socket.on('new user joined', (lobby) => {
+        socket.on('update', (lobby) => {
             console.log("user joined lobby. Lobby now looks like " + JSON.stringify(lobby));
             // overwrite lobby element and re-render;
             this.setState({lobby: lobby});
@@ -41,35 +42,27 @@ export default class LobbyScreen extends Component {
     }
 
     componentDidMount() {
-        console.log("mounting lobby screen")
-        BackHandler.addEventListener('hardwareBackPress', ()=> true);
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
     }
 
     componentWillUnmount(){
-        console.log("unmounting...")
-        this.state.socket.close();
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
     }
 
-    onBackButtonPressAndroid = () => {
-        if (this.isSelectionModeEnabled()) {
-          this.disableSelectionMode();
-          return true;
-        } else {
-          return false;
-        }
-    };
+    handleBackButton() {
+        return true;
+    }
 
     leaveLobby = async() => {
         // 1. Delete User from Lobby from Server (if it was the last user delete lobby);
         const lobbyId = this.state.lobby._id;
         const userId = await getUserId();
         const newLobby = await leaveLobby(lobbyId, userId);
-        console.log("new lobby: " + newLobby);
-        //if lobby object is empty
-
         // 2. Send lobby-users a message someone has leaved the lobby -> update their list of users
-        // 3. Update lobby-list in join lobby screen
-        // 4. Go back to Join-Lobby Screen?
+        let socket = this.state.socket;
+        socket.emit('leave lobby');
+        // 3. Go back to Join-Lobby Screen?
+        this.props.navigation.pop(1);
     }
 
     render() {

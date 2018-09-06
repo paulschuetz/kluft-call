@@ -81,7 +81,13 @@ function joinLobby(lobbyId, userId){
     
     fetchWithTimeout(url, options, timeout)
     .then(response => response.json())
-    .then(lobby => resolve(lobby))
+    .then(json=>{
+      if(isErrorObject(json)){
+        console.log(`Error while user ${userId} attempts to join lobby ${lobbyId}`);
+        reject();
+      }
+      resolve(json);
+    })
     .catch(err => reject(err))
   })
 }
@@ -135,7 +141,7 @@ getGames = (offset, limit) => {
 }
 
 leaveLobby = (lobbyId, userId) => {
-  return new Promise(function(resolve,reject){
+  return new Promise(function(resolve, reject){
     const url = `${lobbyEndpoint}/${lobbyId}/users?userId=${userId}`
     console.log("leaveLobby: " + url);
     const timeout=3000;
@@ -147,12 +153,32 @@ leaveLobby = (lobbyId, userId) => {
       }
     };
     fetchWithTimeout(url, options, timeout)
-    .then(response=> {
-      if(response.status>=400)
-        reject(new Error("response code 400 or higher"));
-      else resolve();
+    .then(response=> response.json())
+    .then(json => {
+      if(isErrorObject(json)){
+        console.log(`error while leaving lobby ${lobbyId}: ${JSON.stringify(json)}`);
+        reject();
+      }
+      console.log(`user ${userId} successfully left lobby ${lobbyId}.`)
+      resolve(json);
     })
   })
+}
+
+// HELPER
+
+/**
+ * @returns boolean
+ */
+isErrorObject = (object) => {
+  if(object.name){
+    if(object.name.includes("Error") || object.name.includes("Exception")){
+      if(object.status && object.status >= 400){
+          return true;
+      }
+    }
+  }
+  return false;
 }
 
 export {registerUser, getLobbies, getGames, createLobby, joinLobby,leaveLobby}

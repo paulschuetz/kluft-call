@@ -10,7 +10,6 @@ import {
   StyleSheet
 } from 'react-native';
 import {Icon} from 'react-native-elements';
-import Promise from 'bluebird';
 import {persistUserData, getUsername, getUserId} from '../clientStorage.js';
 import {registerUser} from '../ServerConnection/ServerApi.js';
 
@@ -56,7 +55,7 @@ export default class RegistrationScreen extends Component {
     <ImageBackground style={{
         flex: 1,
         flexDirection: 'column',
-        justifyContent: 'center'
+        justifyContent: 'center',
       }} source={require('../Assets/KluftcallBackground.png')}>
       <View style={{
           flexDirection: 'row',

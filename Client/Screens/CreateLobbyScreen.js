@@ -11,7 +11,7 @@ import Promise from 'bluebird';
 
 import Swiper from 'react-native-swiper';
 
-import {getUsername} from '../clientStorage'
+import {getUsername, getUserId} from '../clientStorage'
 import {getGames, createLobby} from '../ServerConnection/ServerApi'
 
 export default class CreateLobbyScreen extends Component {
@@ -68,7 +68,7 @@ export default class CreateLobbyScreen extends Component {
     return gamesTypeSwiper;
   }
 
-  handleButtonClick = () => {
+  handleButtonClick = async() => {
     gameIndex = this.state.currentGameIndex;
     gameTypeIndex = this.state.currentGameTypeIndex;
     // clone object to modify it without changing state
@@ -76,13 +76,14 @@ export default class CreateLobbyScreen extends Component {
     delete game._id;
     game.gameType = [game.gameType[gameTypeIndex]];
 
-    getUsername()
-    .then(username=>{
-      const lobby = {"game":game, "invitedUsers":[], "lobbyMembers":[{userName: username}]};
-      return createLobby(lobby);
-    })
+      
+    const userName = await getUsername();
+    const userId = await getUserId();
+    const user = {_id:userId, userName: userName};
+    const lobby = {"game":game, "invitedUsers":[], "lobbyMembers":[user]};
+    
+    createLobby(lobby)
     .then(lobby => {
-      console.log("success!");
       this.props.navigation.navigate('Lobby', {"lobby": lobby})
     })
     .catch(err => console.log("something went wrong while creating the lobby: " + JSON.stringify(err)));

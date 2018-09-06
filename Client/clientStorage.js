@@ -13,6 +13,14 @@ export const persistUserData = async(user) => {
   }
 }
 
+export const isRegistered = async() => {
+  const userName = await getUsername();
+  const userId = await getUserId();
+  console.log(`userId: ${userId}, userName: ${userName}`)
+  if(!userName || !userId) return false;
+  return true;
+}
+
 export async function getUsername() {
     let username;
     try {

@@ -16,7 +16,17 @@ export default class LobbyList extends Component {
   }
 
   componentDidMount(){
+    console.log("mounting LobbyList")
+    // fetch lobbies
     this.fetchData();
+    // set listener, so we can update the list if user navigates back
+    this.subs = [
+      this.props.navigation.addListener('willFocus', () => this.fetchData()),
+    ];
+  }
+
+  componentWillUnmount(){
+    this.subs.forEach(sub => sub.remove());
   }
 
   fetchData = async() => {

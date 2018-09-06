@@ -9,6 +9,10 @@ export default class JoinLobbyScreen extends Component {
     super(props);
   }
 
+  componentDidMount(){
+    console.log("mounting JoinLobbyScreen");
+  }
+
   render() {
     return (
         <View style={{

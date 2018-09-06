@@ -12,6 +12,8 @@ var jsyaml = require('js-yaml');
 var serverPort = 8080;
 var mongoose = require('mongoose')
 
+var DevelopmentService = require('./service/DevelopmentService');
+
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
@@ -54,12 +56,21 @@ swaggerTools.initializeMiddleware(swaggerDoc, function(middleware) {
   // socket connection
   var websocket = socketio(server);
   websocket.on('connection', (socket) => {
-    socket.on('join room', (lobby) => {
+    socket.on('join lobby', (lobby) => {
       const roomId = lobby._id;
       console.log(`socket ${socket.id} joins room/lobby ${roomId}`)
       socket.join(roomId);
-      socket.to(roomId).emit("new user joined", lobby);
+      socket.to(roomId).emit("update", lobby);
     });
+    socket.on('leave lobby', () => {
+      const roomId = Object.keys(socket.rooms).filter(item => item != socket.id);
+      DevelopmentService.getLobby(roomId)
+      .then(lobby => {
+        // update lobby data of every lobby member except the sender
+        socket.to(roomId).emit("update", lobby);
+        socket.leave(roomId);
+      })
+    })
     socket.on('disconnect',(reason)=>{
       console.log(`socket ${socket.id} disconnected for reason: ${reason}`);
     })

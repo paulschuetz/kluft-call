@@ -126,7 +126,7 @@ exports.leaveLobby = function(lobbyId, userId){
         }, 
         function(err, updatedLobby){
           if (err){
-            reject(new HttpError("Failed deleting user from lobby. MongoDb error message: " + JSON.stringify(err), 400));
+            reject(new HttpError("Failed deleting user from lobby. MongoDb error message: " + err, 400));
           }
           console.log(`deleted user ${userId} from lobby ${lobbyId}. New lobby member count: ${updatedLobby.lobbyMembers.length}/${updatedLobby.game[0].gameType[0].numberOfPlayersAllowed}`);
           // check if lobby is empty
@@ -172,8 +172,9 @@ exports.getUsers = function(offset, limit) {
   });
 }
 
+// HELPERS
 
-exports.getUser = function(id){
+function getUser(id){
   console.log(`getUser(id=${id})`)
   return new Promise(function(resolve, reject) {
     models.User.findById(id, function(err, user) {
@@ -182,8 +183,6 @@ exports.getUser = function(id){
     });
   });
 }
-
-// HELPERS
 
 function getLobby(id) {
   console.log(`getLobby(lobbyId=${id})`)
@@ -196,3 +195,4 @@ function getLobby(id) {
 };
 
 exports.getLobby = getLobby;
+exports.getUser = getUser;

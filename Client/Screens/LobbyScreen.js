@@ -9,9 +9,6 @@ import {
 } from 'react-native';
 import { Button } from 'react-native-elements';
 
-import SocketClient from 'socket.io-client'
-
-import {SERVER_IP, SERVER_PORT} from '../constants';
 import {leaveLobby} from '../ServerConnection/ServerApi';
 import {getUserId} from '../clientStorage';
 import {getSocket} from '../ServerConnection/Socket'

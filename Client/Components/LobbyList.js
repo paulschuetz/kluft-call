@@ -4,6 +4,7 @@ import LobbyListElement from './LobbyListElement.js'
 import {List} from 'react-native-elements';
 import {getLobbies} from '../ServerConnection/ServerApi'
 import Promise from 'bluebird';
+import {getSocket} from '../ServerConnection/Socket';
 
 export default class LobbyList extends Component {
 
@@ -23,10 +24,18 @@ export default class LobbyList extends Component {
     this.subs = [
       this.props.navigation.addListener('willFocus', () => this.fetchData()),
     ];
+    // get socket subscribe to event
+    let socket = getSocket();
+    socket.on('lobbies changed', () => {
+      console.log('lobbies updated');
+      this.fetchData();
+    });
   }
 
   componentWillUnmount(){
     this.subs.forEach(sub => sub.remove());
+    let socket = getSocket();
+    socket.off('lobbies updated')
   }
 
   fetchData = async() => {

@@ -140,6 +140,30 @@ getGames = (offset, limit) => {
   });
 }
 
+getUser = (userId) => {
+  return new Promise(function(resolve, reject){
+    const url = userEndpoint + '/' + userId;
+    console.log('getUser: ' + url);
+    const options = {
+      method: 'GET',
+      headers: {
+        'Accept' : 'application/json',
+      }
+    }
+    const timeout = 3000;
+    fetchWithTimeout(url, options, timeout)
+    .then(response=> response.json())
+    .then(json => {
+      if(isErrorObject(json)) reject();
+      else resolve(json);
+    })
+    .catch(err => {
+      console.log("something went wrong while fetching user " + userId + " from server: " +  err);
+      reject();
+    });
+  });
+}
+
 leaveLobby = (lobbyId, userId) => {
   return new Promise(function(resolve, reject){
     const url = `${lobbyEndpoint}/${lobbyId}/users?userId=${userId}`
@@ -181,4 +205,4 @@ isErrorObject = (object) => {
   return false;
 }
 
-export {registerUser, getLobbies, getGames, createLobby, joinLobby,leaveLobby}
+export {registerUser, getLobbies, getGames, createLobby, joinLobby, leaveLobby, getUser}

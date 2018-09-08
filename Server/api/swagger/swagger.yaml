@@ -67,6 +67,27 @@ paths:
         204:
           description: "Created"
       x-swagger-router-controller: "Development"
+  /users/{id}:
+    get:
+      tags:
+      - "development"
+      summary: "get user by id"
+      description: "get user by id"
+      operationId: "getUser"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "id of the user"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "the user matching the id"
+          schema:
+            $ref: "#/definitions/User"
+      x-swagger-router-controller: "Development"    
   /games:
     get:
       tags:
@@ -134,7 +155,7 @@ paths:
       parameters:
       - name: "lobby"
         in: body
-        description: the lobby to be created
+        description: "the lobby to be created"
         required: true
         schema: 
           $ref: "#/definitions/Lobby"
@@ -245,7 +266,7 @@ definitions:
       password: "very-secret"
       name: "808Frittenbude"
   Game:
-    type: "object"
+    type: "object" 
     required:
     - "gameType"
     - "name"

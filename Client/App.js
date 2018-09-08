@@ -7,13 +7,18 @@ import JoinLobbyScreen from './Screens/JoinLobbyScreen.js'
 import CreateLobbyScreen from './Screens/CreateLobbyScreen.js'
 import LobbyScreen from './Screens/LobbyScreen.js';
 
+import {establishSocketConnection} from './ServerConnection/Socket';
+
 const RootStack = createStackNavigator({
   RegisterUser: RegistrationScreen,
   Home: HomeScreen,
   CreateLobby: CreateLobbyScreen,
   JoinLobby: JoinLobbyScreen,
   Lobby: LobbyScreen
-}, {initialRouteName: 'Home',  headerMode:'none'});
+}, {initialRouteName: 'RegisterUser',  headerMode:'none'});
+
+// init socket connection
+establishSocketConnection();
 
 export default class App extends React.Component {
   render() {

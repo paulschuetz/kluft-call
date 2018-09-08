@@ -2,7 +2,19 @@
 
 var utils = require('../utils/writer.js');
 var Development = require('../service/DevelopmentService');
-var Promise = require('bluebird');
+
+
+module.exports.getUser = function getUser (req, res, next) {
+  var id = req.swagger.params['id'].value;
+  Development.getUser(id)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (error) {
+      utils.writeJson(res, error, error.status);
+    });
+};
+
 
 module.exports.createUser = function createUser(req, res, next) {
   var user = req.swagger.params['user'].value;

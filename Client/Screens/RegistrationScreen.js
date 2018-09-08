@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {Icon} from 'react-native-elements';
 import {persistUserData, getUsername, getUserId} from '../clientStorage.js';
-import {registerUser} from '../ServerConnection/ServerApi.js';
+import {registerUser, getUser} from '../ServerConnection/ServerApi.js';
 
 const registerTimeout = 3000;
 
@@ -23,6 +23,22 @@ export default class RegistrationScreen extends Component {
     this.state = {
       isLoading: false
     }
+  }
+
+  async componentDidMount(){
+    const username = await getUsername();
+    const userId = await getUserId();
+    console.log("component did mount: " +  username + "  " +  userId)
+
+    getUser(userId)
+    .then(user => {
+      if(user && user.name === username){
+        // user is registered and exists in db!!!
+        console.log("registered user");
+        this.props.navigation.navigate('Home');
+      }
+    })
+    .catch(err => console.log("err; " + JSON.stringify(err)));
   }
 
   // is invoked if user clicks 'Register' button

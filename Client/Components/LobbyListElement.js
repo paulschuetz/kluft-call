@@ -7,15 +7,22 @@ import {getUserId} from '../clientStorage'
 export default class LobbyListElement extends Component {
 
   joinLobby = (lobbyId) => {
-    getUserId()
-    .then(userId => joinLobby(lobbyId, userId))
-    .then(lobby => {
-      // go to lobby screen and send new lobby data
-      this.props.navigation.navigate('Lobby', {"lobby": lobby});
-      // update list in parent 'LobbyList' component
-      this.props.updateListHandler();
-    })
-    .catch(err => console.log("something went wrong while joining lobby: " + err))
+    // check if full
+    const lobbyInfo = this.props.lobbyInfo;
+    const lobbyMemberCount = lobbyInfo.lobbyMembers.length;
+    const lobbySize = lobbyInfo.game[0].gameType[0].numberOfPlayersAllowed;
+    if(lobbyMemberCount>=lobbySize) this.props.showToast("This lobby has reached its maximum size");
+    else{
+      getUserId()
+      .then(userId => joinLobby(lobbyId, userId))
+      .then(lobby => {
+        // go to lobby screen and send new lobby data
+        this.props.navigation.navigate('Lobby', {"lobby": lobby});
+        // update list in parent 'LobbyList' component
+        this.props.updateListHandler();
+      })
+      .catch(err => console.log("something went wrong while joining lobby: " + err))
+    }
   }
 
   render() {

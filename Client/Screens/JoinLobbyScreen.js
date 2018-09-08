@@ -1,12 +1,16 @@
 import React, {Component} from 'react';
-import {View, Text} from 'react-native';
+import {View, Text, Button} from 'react-native';
 import LobbyList from '../Components/LobbyList'
-import Promise from 'bluebird';
+import Toast, {DURATION} from 'react-native-easy-toast'
 
 export default class JoinLobbyScreen extends Component {
 
   constructor(props){
     super(props);
+  }
+
+  showToast = (text) => {
+    this.refs.toast.show(text);
   }
 
   render() {
@@ -18,7 +22,8 @@ export default class JoinLobbyScreen extends Component {
           // alignItems: "center"
         }}>
           <Text>JoinLobby Screen</Text>
-          <LobbyList navigation={this.props.navigation}/>
+          <LobbyList navigation={this.props.navigation} showToast={this.showToast}/>
+          <Toast ref="toast"/>
         </View>
     );
     

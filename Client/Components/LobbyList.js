@@ -3,7 +3,6 @@ import { FlatList } from 'react-native';
 import LobbyListElement from './LobbyListElement.js'
 import {List} from 'react-native-elements';
 import {getLobbies} from '../ServerConnection/ServerApi'
-import Promise from 'bluebird';
 import {getSocket} from '../ServerConnection/Socket';
 
 export default class LobbyList extends Component {
@@ -14,9 +13,11 @@ export default class LobbyList extends Component {
       lobbyData:[]
     };
     this.handleListUpdate = this.handleListUpdate.bind(this);
+    
   }
 
   componentDidMount(){
+    console.log("toast obj: " + JSON.stringify(this.props.showToast))
     console.log("mounting LobbyList")
     // fetch lobbies
     this.fetchData();
@@ -55,7 +56,7 @@ export default class LobbyList extends Component {
           keyExtractor={(x, i) => i.toString()}
           renderItem = 
               {({ item }) => 
-              <LobbyListElement navigation={this.props.navigation} lobbyInfo={item} updateListHandler = {this.handleListUpdate}/>
+              <LobbyListElement navigation={this.props.navigation} lobbyInfo={item} updateListHandler = {this.handleListUpdate} showToast={this.props.showToast}/>
             }
         />
       </List>

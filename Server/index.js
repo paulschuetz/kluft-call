@@ -60,8 +60,12 @@ swaggerTools.initializeMiddleware(swaggerDoc, function(middleware) {
     socket.on('join lobby', (lobby) => {
       const roomId = lobby._id;
       console.log(`socket ${socket.id} joins room/lobby ${roomId}`)
+      // join room
       socket.join(roomId);
+      // tell lobby members to update their list of members
       socket.to(roomId).emit("update", lobby);
+      // tell everyone currently in JoinLobby-Screen to update their list of lobbies
+      websocket.emit('lobbies changed');
     });
     socket.on('leave lobby', () => {
       const roomId = Object.keys(socket.rooms).filter(item => item != socket.id);
@@ -70,6 +74,8 @@ swaggerTools.initializeMiddleware(swaggerDoc, function(middleware) {
         // update lobby data of every lobby member except the sender
         socket.to(roomId).emit("update", lobby);
         socket.leave(roomId);
+        // refresh lobby lists
+        websocket.emit('lobbies changed');
       })
     })
     socket.on('disconnect',(reason)=>{

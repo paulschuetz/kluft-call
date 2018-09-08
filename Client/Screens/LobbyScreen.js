@@ -32,16 +32,13 @@ export default class LobbyScreen extends Component {
 
         // configure socket events
         let socket = getSocket();
-        console.log("mounted lobbyscreen with socket: " +  socket.id)
         // join room of lobby
         socket.emit('join lobby', this.state.lobby)
         // if someone joined the lobby update the lobby data
         socket.on('update', (lobby) => {
-            console.log("socket " +socket.id +": user joined lobby. Lobby now looks like " + JSON.stringify(lobby));
             // overwrite lobby element and re-render;
             this.setState({lobby: lobby});
         });
-        
     }
 
     componentWillUnmount(){
@@ -63,7 +60,7 @@ export default class LobbyScreen extends Component {
         // 2. Send lobby-users a message someone has leaved the lobby -> update their list of users
         let socket = getSocket();
         socket.emit('leave lobby');
-        // 3. Go back to Join-Lobby Screen?
+        // 3. Go back 
         this.props.navigation.pop(1);
     }
 

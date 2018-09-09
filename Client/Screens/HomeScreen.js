@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View,ImageBackground, Button} from 'react-native';
+import {View,ImageBackground, Button, BackHandler} from 'react-native';
 
 import {isRegistered} from '../clientStorage';
 
@@ -9,6 +9,19 @@ export default class HomeScreen extends Component {
        super(props);
        isRegistered();
    }
+
+   componentDidMount(){
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+   }
+
+   componentWillUnmount(){
+     console.log("unmounting");
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+  }
+
+  handleBackButton() {
+    return true;
+  }
 
   // socket = SocketIOClient('http://192.168.178.60:8080');
   render() {

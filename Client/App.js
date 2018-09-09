@@ -8,14 +8,16 @@ import CreateLobbyScreen from './Screens/CreateLobbyScreen.js'
 import LobbyScreen from './Screens/LobbyScreen.js';
 
 import {establishSocketConnection} from './ServerConnection/Socket';
+import StartupScreen from './Screens/StartupScreen.js';
 
 const RootStack = createStackNavigator({
+  StartUp: StartupScreen,
   RegisterUser: RegistrationScreen,
   Home: HomeScreen,
   CreateLobby: CreateLobbyScreen,
   JoinLobby: JoinLobbyScreen,
   Lobby: LobbyScreen
-}, {initialRouteName: 'RegisterUser',  headerMode:'none'});
+}, {initialRouteName: 'StartUp',  headerMode:'none'});
 
 // init socket connection
 establishSocketConnection();

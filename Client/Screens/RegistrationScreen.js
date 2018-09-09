@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
 import {
   ActivityIndicator,
-  AsyncStorage,
   View,
-  Text,
   ImageBackground,
   Button,
   TextInput,
@@ -24,23 +22,7 @@ export default class RegistrationScreen extends Component {
       isLoading: false
     }
   }
-
-  async componentDidMount(){
-    const username = await getUsername();
-    const userId = await getUserId();
-    console.log("component did mount: " +  username + "  " +  userId)
-
-    getUser(userId)
-    .then(user => {
-      if(user && user.name === username){
-        // user is registered and exists in db!!!
-        console.log("registered user");
-        this.props.navigation.navigate('Home');
-      }
-    })
-    .catch(err => console.log("err; " + JSON.stringify(err)));
-  }
-
+  
   // is invoked if user clicks 'Register' button
   register = () => {
     // indicate we are doing network stuff

@@ -9,7 +9,7 @@ Server managing database operations and business logic. Handles client's REST-AP
 ```
 $mongod 
 ``` 
-server will by default start at port 27017
+server will by default start at port 27017.
 
 If you have issues starting the database: https://stackoverflow.com/questions/20796714/how-do-i-start-mongo-db-from-windows
 
